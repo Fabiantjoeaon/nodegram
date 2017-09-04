@@ -1,0 +1,19 @@
+{
+  "name": "nodegram",
+  "version": "1.0.0",
+  "description": "Instagram clone for educational purposes",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fabiantjoeaon/nodegram.git"
+  },
+  "author": "Fabian Tjoe-A-On",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Fabiantjoeaon/nodegram/issues"
+  },
+  "homepage": "https://github.com/Fabiantjoeaon/nodegram#readme"
+}
