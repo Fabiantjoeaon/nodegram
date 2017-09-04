@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const flash = require('connect-flash');
 const helmet = require('helmet');
 const expressSanitizer = require('express-sanitizer');
+const router = require('./routes.js');
 
 const app = express();
 
@@ -27,5 +28,7 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: false}));
 app.use(expressSanitizer({}));
 
 app.use(flash());
+
+app.use('/', router);
 
 module.exports = app;

@@ -1,7 +1,7 @@
 'use strict';
 
 const bcrypt = require('bcrypt');
-const isEmail = require('validator/lib/isEmail');
+const {encrypt, isHashMatching} = require('../helpers/hashing');
 const mongodbErrorHandler = require('mongoose-mongodb-errors');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
@@ -13,9 +13,23 @@ const User = new Schema({
         unique: true,
         lowercase: true,
         trim: true,
-        required: 'Please supply a username'
-    }
+        required: 'Please supply a username',
+        index: { unique: true }
+    },
+    password: { type: String, required: true }
 });
+
+User.pre('save', async (next) => {
+    if (!user.isModified('password')) return next();
+
+    const hash = await encrypt(this.password);
+    this.password = hash;
+
+    next();
+});
+
+User.methods.comparePassword = async (candidatePassword) => 
+    await isHashMatching(candidatePassword, this.password);
 
 User.plugin(mongodbErrorHandler);
 

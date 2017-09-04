@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/Fabiantjoeaon/nodegram#readme",
   "dependencies": {
-    "bcrypt": "^1.0.3",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.17.2",
     "connect-flash": "^0.1.1",
     "date-fns": "^1.28.5",
