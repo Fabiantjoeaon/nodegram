@@ -17,10 +17,12 @@
   },
   "homepage": "https://github.com/Fabiantjoeaon/nodegram#readme",
   "dependencies": {
+    "bcrypt": "^1.0.3",
     "body-parser": "^1.17.2",
     "connect-flash": "^0.1.1",
     "date-fns": "^1.28.5",
     "dotenv": "^4.0.0",
+    "es6-promisify": "^5.0.0",
     "express": "^4.15.4",
     "express-sanitizer": "^1.0.2",
     "fs": "0.0.1-security",
@@ -32,6 +34,7 @@
     "passport-local-mongoose": "^4.2.1",
     "path": "^0.12.7",
     "pug": "^2.0.0-rc.3",
-    "uuid": "^3.1.0"
+    "uuid": "^3.1.0",
+    "validator": "^8.1.0"
   }
 }
