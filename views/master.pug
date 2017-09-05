@@ -1,5 +1,3 @@
-include ./mixins/_navUserPanel
-
 doctype html
 html
     head
@@ -15,6 +13,18 @@ html
         <![endif]-->
         
     body
+        .container
+            .navbar
+                a(href='/').navbar-brand Nodegram
+
+                ul.navbar-right
+                    if(!user)
+                        li.menu-item Login
+                        li.menu-item Sign up
+            
+            .row 
+                .col-xs-12
+                    block content
 
 
 

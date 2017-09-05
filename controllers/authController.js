@@ -1,21 +1,31 @@
 const User = require('../models/User');
 
 const renderSignUp = async (req, res) => {
-    console.log('here')
-    const user = new User({
-        username: 'fabian',
-        password: 'bla'
+    return res.render('auth/signup', {
+        title: 'Sign up'
     });
-    
-    await user.save();
-    console.log('saved')
 }
 
 const renderLogin = (req, res) => {
 
 }
 
+const signup = async (req, res) => {
+
+    const {username, password} = req.body;
+
+    const user = new User({
+        username,
+        password
+    });
+
+    await user.save();
+    
+    return res.redirect('/auth/signup');
+}
+
 module.exports = {
     renderSignUp,
-    renderLogin
+    renderLogin,
+    signup
 }
