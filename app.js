@@ -3,10 +3,14 @@
 require('dotenv').config({ path: 'variables.env' });
 
 const express = require('express');
+const session = require('express-session');
+const mongoose = require('mongoose');
+const MongoStore = require('connect-mongo')(session);
 const path = require('path');
 const bodyParser = require('body-parser');
 const flash = require('connect-flash');
 const helmet = require('helmet');
+
 const expressSanitizer = require('express-sanitizer');
 const router = require('./routes.js');
 
@@ -18,10 +22,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(helmet());
 app.use(helmet.hidePoweredBy());
-app.use( helmet.hsts( { maxAge: 7776000000 } ) ) ;
-app.use( helmet.frameguard( 'SAMEORIGIN' ) ) ;
-app.use(helmet.xssFilter( { setOnOldIE: true } ));
+app.use(helmet.hsts( { maxAge: 7776000000 })) ;
+app.use(helmet.frameguard( 'SAMEORIGIN' )) ;
+app.use(helmet.xssFilter({ setOnOldIE: true }));
 app.use(helmet.noSniff());
+
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    key: process.env.SESSION_KEY,
+    resave: false,
+    saveUninitialized: false,
+    store: new MongoStore({
+        mongooseConnection: mongoose.connection
+    })
+}));
 
 app.use(bodyParser.json({limit: '50mb'}))
 app.use(bodyParser.urlencoded({limit: '50mb', extended: false}));

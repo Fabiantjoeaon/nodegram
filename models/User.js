@@ -1,6 +1,5 @@
 'use strict';
 
-const bcrypt = require('bcrypt');
 const {encrypt, isHashMatching} = require('../helpers/hashing');
 const mongodbErrorHandler = require('mongoose-mongodb-errors');
 const mongoose = require('mongoose');
@@ -19,18 +18,19 @@ const User = new Schema({
     password: { type: String, required: true }
 });
 
-User.pre('save', async (next) => {
-    if (!user.isModified('password')) return next();
+User.pre('save', async function(next) {
+    if (!this.isModified('password')) return next();
 
-    const hash = await encrypt(this.password);
+    const hash = await encrypt(this.password);    
     this.password = hash;
 
     next();
 });
 
-User.methods.comparePassword = async (candidatePassword) => 
+User.methods.comparePassword = async function(candidatePassword) {
     await isHashMatching(candidatePassword, this.password);
+} 
 
 User.plugin(mongodbErrorHandler);
 
-module.exports = mongoose.Model('User', User);
+module.exports = mongoose.model('User', User);

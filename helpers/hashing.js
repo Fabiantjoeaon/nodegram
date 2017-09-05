@@ -1,6 +1,6 @@
 'use strict';
 
-const bcrypt = require('bcryptjs');
+const {genSaltSync, hash, compare} = require('bcrypt');
 
 /**
  * @public
@@ -9,8 +9,11 @@ const bcrypt = require('bcryptjs');
  * @returns {String} Generated token
  */
 const encrypt = async (stringToHash) => {
-    const salt = await bcrypt.genSaltSync(process.env.SALT_HASH_ROUNDS);
-    return await bcrypt.hash(stringToHash, salt);
+    const salt = genSaltSync(
+        parseInt(process.env.SALT_HASH_ROUNDS)
+    );
+    
+    return await hash(stringToHash, salt);
 }
 
 /**
@@ -22,7 +25,7 @@ const encrypt = async (stringToHash) => {
  * @returns {Boolean} 
  */
 const isHashMatching = async (stringToHash, hash) => {
-    return await bcrypt.compare(stringToHash, hash);
+    return await compare(stringToHash, hash);
 } 
 
 module.exports = { encrypt, isHashMatching };
