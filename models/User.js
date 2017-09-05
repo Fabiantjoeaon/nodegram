@@ -3,6 +3,7 @@
 const {encrypt, isHashMatching} = require('../helpers/hashing');
 const mongodbErrorHandler = require('mongoose-mongodb-errors');
 const mongoose = require('mongoose');
+
 const Schema = mongoose.Schema;
 mongoose.Promise = global.Promise;
 

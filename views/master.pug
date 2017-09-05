@@ -17,10 +17,23 @@ html
             .navbar
                 a(href='/').navbar-brand Nodegram
 
-                ul.navbar-right
+                ul.navbar-right.navbar-nav
                     if(!user)
-                        li.menu-item Login
-                        li.menu-item Sign up
+                        li.nav-item 
+                            a.nav-link(href='/auth/login') Login
+                        li.nav-item 
+                            a.nav-link(href='/auth/signup') Sign up
+                
+            
+            if(locals.flashes && !(locals.flashes.error && typeof locals.flashes.error[0] == 'object'))
+                each category in Object.keys(locals.flashes)
+                    each message, index in flashes[category]
+                        .flash__wrapper(class=`flash--${category} flash__wrapper--${index}`).to-foreground
+                            .container
+                                .col-xs-12
+                                    .flash
+                                        span.flash__text!= message
+                                        span.flash__remove(data-flash=index) &times;
             
             .row 
                 .col-xs-12

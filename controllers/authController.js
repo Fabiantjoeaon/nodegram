@@ -7,11 +7,12 @@ const renderSignUp = async (req, res) => {
 }
 
 const renderLogin = (req, res) => {
-
+    return res.render('auth/login', {
+        title: 'Login'
+    });
 }
 
 const signup = async (req, res) => {
-
     const {username, password} = req.body;
 
     const user = new User({

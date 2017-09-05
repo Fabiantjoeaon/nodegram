@@ -5,9 +5,11 @@ require('dotenv').config({ path: 'variables.env' });
 const express = require('express');
 const session = require('express-session');
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
 const MongoStore = require('connect-mongo')(session);
 const path = require('path');
 const bodyParser = require('body-parser');
+const passport = require('passport');
 const flash = require('connect-flash');
 const helmet = require('helmet');
 
@@ -37,12 +39,22 @@ app.use(session({
     })
 }));
 
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(cookieParser());
 app.use(bodyParser.json({limit: '50mb'}))
 app.use(bodyParser.urlencoded({limit: '50mb', extended: false}));
 app.use(expressSanitizer({}));
 
 app.use(flash());
 
-app.use('/', router);
+app.use((req, res, next) => {
+    res.locals.flashes = req.flash();
+    res.locals.user = req.user || null;
+    next();
+});
+
+require('./config/passport')(passport); 
+require('./routes')(app, passport);
 
 module.exports = app;
