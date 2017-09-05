@@ -12,7 +12,6 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const flash = require('connect-flash');
 const helmet = require('helmet');
-
 const expressSanitizer = require('express-sanitizer');
 const router = require('./routes.js');
 

@@ -3,6 +3,7 @@
 const {encrypt, isHashMatching} = require('../helpers/hashing');
 const mongodbErrorHandler = require('mongoose-mongodb-errors');
 const mongoose = require('mongoose');
+const validate = require('validate.js');
 
 const Schema = mongoose.Schema;
 mongoose.Promise = global.Promise;
@@ -13,10 +14,17 @@ const User = new Schema({
         unique: true,
         lowercase: true,
         trim: true,
-        required: 'Please supply a username',
         index: { unique: true }
     },
-    password: { type: String, required: true }
+    password: { 
+        type: String
+    },
+    bio: {
+        type: String
+    },
+    avatar: {
+        type: String
+    }
 });
 
 User.pre('save', async function(next) {
@@ -28,9 +36,23 @@ User.pre('save', async function(next) {
     next();
 });
 
-User.methods.comparePassword = async function(candidatePassword) {
-    await isHashMatching(candidatePassword, this.password);
-} 
+User.statics.getInitialConstraints = () => ({
+    username: {
+        presence: true,
+        length: {
+            minimum: 2,
+            maximum: 15,
+            message: 'must be between 2 and 15 characters'
+        }
+    },
+    password: {
+        presence: true,
+        length: {
+            minimum: 4,
+            message: 'must be at least 4 characters'
+        }
+    }
+});
 
 User.plugin(mongodbErrorHandler);
 

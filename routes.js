@@ -10,6 +10,7 @@ module.exports = (app, passport) => {
         failureRedirect : '/auth/login',
         failureFlash : true 
     }))
+    app.get('/auth/logout', authController.logout)
 }
 
 

@@ -23,7 +23,7 @@ module.exports = (passport) => {
         const user = await User.findOne({username});
         console.log('here2', user)        
         if (!user)
-            return done(null, false, req.flash('error', 'No user found.')); 
+            return done(null, false, req.flash('error', 'Wrong credentials.')); 
         console.log('here3')
         if (!user.comparePassword(password))
             return done(null, false, req.flash('error', 'Wrong credentials.')); 
