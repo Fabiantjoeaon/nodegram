@@ -23,4 +23,20 @@ window.onload = function() {
         }
     }
     removeFlashMessage();
+
+    const appendFirstLetterToAvatarPlaceholder = () => {
+        const placeholders = $$('.avatar--placeholder');
+        if(placeholders) {
+            placeholders.forEach(placeholder => {
+                const firstLetter = placeholder.getAttribute('data-name').charAt(0);
+                const firstLetterEl = document.createElement('span');
+                firstLetterEl.classList.add('placeholder__letter');
+                firstLetterEl.style.lineHeight = `${placeholder.clientHeight}px`;
+                firstLetterEl.innerText = firstLetter.toUpperCase();
+                placeholder.appendChild(firstLetterEl);
+            });
+        }
+    };
+
+    appendFirstLetterToAvatarPlaceholder();
 }

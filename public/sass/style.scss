@@ -20,8 +20,45 @@ a {
     }
 }
 
+
+.avatar {
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+}
+
+.avatar--placeholder {
+    color: #fff;
+    background-color: $orangeRed;
+
+    .placeholder__letter {
+        font-size: 5em;
+        font-family: 'Rubik', sans-serif;
+        font-weight: 700;
+    
+        text-align: center;
+        display: block;
+        cursor: default;
+    }
+}
+.profile__avatar {
+    width: 200px;
+    height: 200px;
+    position: relative;
+    margin: 0px auto 30px auto;
+}
+
+.edit__avatar {
+    width: 100px;
+    height: 100px;
+}
+
 .navbar-nav {
     flex-direction: row;
+}
+
+p {
+    font-family: 'Roboto Mono', sans-serif;
 }
 
 .nav-item {
@@ -43,6 +80,8 @@ a {
     right: 10px;
     font-size: 0.9em;
     margin-bottom: 15px;
+
+    font-family: 'Roboto Mono', sans-serif;
 }
 
 .content {

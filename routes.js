@@ -3,7 +3,12 @@ const authController = require('./controllers/authController');
 const userController = require('./controllers/userController');
 const webController = require('./controllers/webController');
 const {ensureLoggedIn, ensureLoggedOut} = require('./middleware/authMiddleware');
-const {filterPhoto, resizeAndWritePhoto} = require('./middleware/authMiddleware');
+const {
+    filterAvatar, 
+    filterPhoto, 
+    resizeAndWritePhoto,
+    resizeAndWriteAvatar
+} = require('./middleware/uploadMiddleware');
 
 module.exports = (app, passport) => {
     /**
@@ -31,7 +36,7 @@ module.exports = (app, passport) => {
     app.get('/users/:username', ensureLoggedIn, userController.show);
     app.get('/users/:username/edit', ensureLoggedIn, userController.showEdit);
     app.post('/users/:username/edit', ensureLoggedIn, 
-        filterPhoto, catchErrors(resizeAndWritePhoto), 
+        filterAvatar, catchErrors(resizeAndWriteAvatar), 
         userController.edit);
 }
 

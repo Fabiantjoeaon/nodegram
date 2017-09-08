@@ -94,6 +94,22 @@ window.onload = function () {
         }
     };
     removeFlashMessage();
+
+    var appendFirstLetterToAvatarPlaceholder = function appendFirstLetterToAvatarPlaceholder() {
+        var placeholders = (0, _bling.$$)('.avatar--placeholder');
+        if (placeholders) {
+            placeholders.forEach(function (placeholder) {
+                var firstLetter = placeholder.getAttribute('data-name').charAt(0);
+                var firstLetterEl = document.createElement('span');
+                firstLetterEl.classList.add('placeholder__letter');
+                firstLetterEl.style.lineHeight = placeholder.clientHeight + 'px';
+                firstLetterEl.innerText = firstLetter.toUpperCase();
+                placeholder.appendChild(firstLetterEl);
+            });
+        }
+    };
+
+    appendFirstLetterToAvatarPlaceholder();
 };
 
 /***/ }),

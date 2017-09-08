@@ -50,6 +50,8 @@ app.use(flash());
 app.use((req, res, next) => {
     res.locals.flashes = req.flash();
     res.locals.user = req.user || null;
+    if(req.body.submit)
+        delete req.body.submit
     next();
 });
 

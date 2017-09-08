@@ -5,21 +5,21 @@ block content
     
     .col-xs-4
     .col-xs-4
-        form(action=`users/${resourceUser.username}/edit` id='editUserForm' method='POST' enctype='multipart/form-data')
+        form(action=`/users/${resourceUser.username}/edit` id='editUserForm' method='POST' enctype='multipart/form-data')
             .form-group
                 label(for='username') Username
                 input.form-control(type='text' name='username' value=resourceUser.username)
             
             .form-group
                 label(for='bio') Bio
-                textarea.form-control(form="editUserForm" rows="5" name="bio" value=resourceUser.bio)
+                textarea.form-control(form="editUserForm" rows="5" name="bio") #{resourceUser.bio}
             
             if(resourceUser.avatar)
                 h4 Current avatar:
                 .form-group
-                    .edit-view__avatar.avatar(
+                    .edit__avatar.avatar(
                         style= resourceUser.avatar ? `background-image:url('/uploads/${resourceUser.avatar}')` : null 
-                        class= !resourceUser.avatar ? 'avatar--placeholder placeholder--resourceUser' : null
+                        class= !resourceUser.avatar ? 'avatar--placeholder' : null
                         data-name=resourceUser.name)
                     
                     input(type="checkbox" name="delete_avatar")
@@ -29,6 +29,7 @@ block content
             .form-group
                 label(for="avatar") Avatar
                 input.form-control(type="file" name="avatar" accept="image/png, image/jpeg")
+                
             .form-group
                 input.button.button-info.form-control(type='submit' name='submit')
     .col-xs-4

@@ -29,13 +29,9 @@ const write = async (file, name) => {
     return `${getYear(date)}/${getMonth(date)}/${name}`;
 }
 
-/**
- * 
- */
-const filterPhoto = multer({
+const filter = {
     storage: multer.memoryStorage(),
     fileFilter(req, file, next) {
-        // TODO: uitvoerbare mimi types beveiligen
         const isPhoto = file.mimetype.startsWith('image');
         
         if(isPhoto) {
@@ -44,7 +40,15 @@ const filterPhoto = multer({
             next(new Error('That filetype is not allowed!'), false);
         }
     }
+}
+
+const filterAvatar = multer({
+    filter
 }).single('avatar');
+
+const filterPhoto = multer({
+    filter
+}).single('photo');
 
 /**
  * 
@@ -59,23 +63,52 @@ const resizeAndWritePhoto = async (req, res, next) => {
     const extension = req.file.mimetype.split('/')[1];
     const name = `${uuid.v4()}.${extension}`;
 
-    let avatar;
+    let photo;
     if(extension == 'gif') {
         req.flash('error', 'That filetype is not supported!');
         return res.redirect('back');
     } else {
-        avatar = await jimp.read(req.file.buffer);
-        await avatar.resize(parseInt(process.env.RESIZE_AVATAR_SIZE), jimp.AUTO);
+        photo = await jimp.read(req.file.buffer);
+        await photo.resize(parseInt(process.env.RESIZE_AVATAR_SIZE), jimp.AUTO);
     }
 
-    req.body.avatar = await write(avatar, name);
+    req.body.photo = await write(photo, name);
+
+    next();
+}
+
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+const resizeAndWriteAvatar = async (req, res, next) => {
+    if(!req.file) 
+        return next();
+    
+    const extension = req.file.mimetype.split('/')[1];
+    const name = `${uuid.v4()}.${extension}`;
+
+    let photo;
+    if(extension == 'gif') {
+        req.flash('error', 'That filetype is not supported!');
+        return res.redirect('back');
+    } else {
+        photo = await jimp.read(req.file.buffer);
+        await photo.resize(parseInt(process.env.RESIZE_AVATAR_SIZE), jimp.AUTO);
+    }
+
+    req.body.avatar = await write(photo, name);
 
     next();
 }
 
 
 module.exports = {
-    filterPhoto,
-    resizeAndWritePhoto
+    filterAvatar, 
+    filterPhoto, 
+    resizeAndWritePhoto,
+    resizeAndWriteAvatar
 };
 

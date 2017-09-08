@@ -1,6 +1,10 @@
 extends ../master
 
 block content
+    .profile__avatar.avatar(
+        style= resourceUser.avatar ? `background-image:url('/uploads/${resourceUser.avatar}')` : null 
+        class= !resourceUser.avatar ? 'avatar--placeholder placeholder--resourceUser' : null
+        data-name=resourceUser.username)
     h1.text-center!= `${resourceUser.username}`
     if(user.username == resourceUser.username)
         a.text-center.edit-user(href=`/users/${user.username}/edit`)
