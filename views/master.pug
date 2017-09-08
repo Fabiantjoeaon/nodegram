@@ -3,10 +3,10 @@ html
     head
         title= `Nodegram | ${title}`
         link(href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css", rel="stylesheet")
-        link(href='https://fonts.googleapis.com/css?family=Rubik', rel='stylesheet')
-        link(href='https://fonts.googleapis.com/css?family=Roboto-Mono', rel='stylesheet')
-        link(href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css', rel='stylesheet')
-        //- link(rel='stylesheet', href='/dist/style.css')
+        link(href='https://fonts.googleapis.com/css?family=Rubik:400,700,900', rel='stylesheet')
+        link(href='https://fonts.googleapis.com/css?family=Roboto+Mono', rel='stylesheet')
+        link(href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css', rel='stylesheet')
+        link(rel='stylesheet', href='/dist/style.css')
         meta(name="viewport" content="width=device-width, initial-scale=1")
         <!--[if lt IE 9]>
             script(src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js")
@@ -20,7 +20,7 @@ html
                 ul.navbar-right.navbar-nav
                     if(user)
                         li.nav-item 
-                            a.nav-link(href=`/users/username`) #{user.username}
+                            a.nav-link(href=`/users/${user.username}`) #{user.username}
                     else
                         li.nav-item 
                             a.nav-link(href='/auth/login') Login
@@ -29,7 +29,7 @@ html
                 
             if(flashes)
                 each category in Object.keys(flashes)
-                    if(!flashes.error && typeof flashes.error[0] == 'object')
+                    if(!flashes.error && !typeof flashes.error[0] == 'object')
                         each message, index in flashes[category]
                             .flash__wrapper(class=`flash--${category} flash__wrapper--${index}`).to-foreground
                                 .container
@@ -48,11 +48,12 @@ html
                                                 .flash
                                                     span.flash__text!= message
                                                     span.flash__remove(data-flash=index) &times;
-
             
-            .row 
-                .col-xs-12
-                    block content
+        
+            .col-xs-12.content
+                block content
+
+            //- script(src="/dist/bundle.js")
 
 
 

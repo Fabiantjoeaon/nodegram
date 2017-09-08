@@ -27,6 +27,8 @@ const User = new Schema({
     }
 });
 
+User.set('toJSON', { getters: true, virtuals: false });
+
 User.pre('save', async function(next) {
     if (!this.isModified('password')) return next();
 
@@ -53,6 +55,10 @@ User.statics.getInitialConstraints = () => ({
         }
     }
 });
+
+User.methods.comparePassword = async function(candidatePassword) {
+    await isHashMatching(candidatePassword, this.password);
+} 
 
 User.plugin(mongodbErrorHandler);
 
