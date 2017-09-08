@@ -1,6 +1,7 @@
 extends ../master
 
 block content
+    - const isThisUser = user.username == resourceUser.username;
     .profile__avatar.avatar(
         style= resourceUser.avatar ? `background-image:url('/uploads/${resourceUser.avatar}')` : null 
         class= !resourceUser.avatar ? 'avatar--placeholder placeholder--resourceUser' : null
@@ -11,3 +12,10 @@ block content
             i.fa.fa-pencil
             span.fa-padding-left-from-icon Edit your profile
     p.text-center!= resourceUser.bio ? resourceUser.bio : 'This user has no bio!'
+
+    if(!resourceUser.photos || resourceUser.photos.length == 0)
+        h2!= `${isThisUser ? 'You' : resourceUser.username} ${isThisUser ? 'have' : 'has'} no photos yet!`
+        if(isThisUser)
+            a(href='/photos/new') Upload a new photo
+    else 
+    

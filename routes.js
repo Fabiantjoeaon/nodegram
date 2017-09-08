@@ -1,6 +1,7 @@
 const {catchErrors} = require('./middleware/errorMiddleware');
 const authController = require('./controllers/authController');
 const userController = require('./controllers/userController');
+const photoController = require('./controllers/photoController');
 const webController = require('./controllers/webController');
 const {ensureLoggedIn, ensureLoggedOut} = require('./middleware/authMiddleware');
 const {
@@ -38,6 +39,17 @@ module.exports = (app, passport) => {
     app.post('/users/:username/edit', ensureLoggedIn, 
         filterAvatar, catchErrors(resizeAndWriteAvatar), 
         userController.edit);
+
+    /**
+     * PHOTO
+     */
+    app.get('/photos/new', ensureLoggedIn, photoController.showCreate);
+    app.post('/photos/new', ensureLoggedIn, 
+        filterPhoto, catchErrors(resizeAndWritePhoto), 
+        photoController.create);
+    app.get('/photos/:id', ensureLoggedIn, 
+        photoController.show);
+    
 }
 
 

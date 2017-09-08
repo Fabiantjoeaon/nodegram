@@ -27,19 +27,12 @@ const User = new Schema({
     },
     avatar: {
         type: String
-    }
+    },
+    userPhotos: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Photo'
+    }]
 });
-
-User.set('toJSON', { getters: true, virtuals: false });
-
-// User.pre('save', async function(next) {
-//     if (!this.isModified('password')) return next();
-
-//     const hash = await encrypt(this.password);    
-//     this.password = hash;
-
-//     next();
-// });
 
 User.pre('save', async function(next) {
     if (!this.isModified('password')) return next();
