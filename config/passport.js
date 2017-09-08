@@ -21,13 +21,16 @@ module.exports = (passport) => {
 
     async (req, username, password, done) => { 
         const user = await User.findOne({username});
-        console.log('here2', user)        
+        
         if (!user)
             return done(null, false, req.flash('error', 'Wrong credentials.')); 
-        console.log('here3')
-        if (!user.comparePassword(password))
+
+        const isPasswordMatching = await user.comparePassword(password);
+        
+        if (!isPasswordMatching)
             return done(null, false, req.flash('error', 'Wrong credentials.')); 
-        console.log('here4')
+        
+        req.flash('success', `Welcome ${user.username}`);
         return done(null, user);
     }));
 }

@@ -21,6 +21,9 @@ html
                     if(user)
                         li.nav-item 
                             a.nav-link(href=`/users/${user.username}`) #{user.username}
+                        li.nav-item 
+                            a.nav-link(href=`/auth/logout`) Logout
+
                     else
                         li.nav-item 
                             a.nav-link(href='/auth/login') Login
@@ -29,16 +32,7 @@ html
                 
             if(flashes)
                 each category in Object.keys(flashes)
-                    if(!flashes.error && !typeof flashes.error[0] == 'object')
-                        each message, index in flashes[category]
-                            .flash__wrapper(class=`flash--${category} flash__wrapper--${index}`).to-foreground
-                                .container
-                                    .col-xs-12
-                                        .flash
-                                            span.flash__text!= message
-                                            span.flash__remove(data-flash=index) &times;
-                                            
-                    else if (flashes.error && typeof flashes.error[0] == 'object')
+                    if (flashes.error && typeof flashes.error[0] == 'object')
                         each error in flashes[category]
                             each validation in error
                                 each message, index in validation
@@ -48,12 +42,22 @@ html
                                                 .flash
                                                     span.flash__text!= message
                                                     span.flash__remove(data-flash=index) &times;
-            
+
+                    else             
+                        each message, index in flashes[category]
+                            .flash__wrapper(class=`flash--${category} flash__wrapper--${index}`).to-foreground
+                                .container
+                                    .col-xs-12
+                                        .flash
+                                            span.flash__text!= message
+                                            span.flash__remove(data-flash=index) &times;
+                                            
+
         
             .col-xs-12.content
                 block content
 
-            //- script(src="/dist/bundle.js")
+            script(src="/dist/bundle.js")
 
 
 

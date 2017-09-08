@@ -22,12 +22,24 @@ const User = new Schema({
     bio: {
         type: String
     },
+    isAdmin: {
+        type: Boolean
+    },
     avatar: {
         type: String
     }
 });
 
 User.set('toJSON', { getters: true, virtuals: false });
+
+// User.pre('save', async function(next) {
+//     if (!this.isModified('password')) return next();
+
+//     const hash = await encrypt(this.password);    
+//     this.password = hash;
+
+//     next();
+// });
 
 User.pre('save', async function(next) {
     if (!this.isModified('password')) return next();
@@ -57,7 +69,7 @@ User.statics.getInitialConstraints = () => ({
 });
 
 User.methods.comparePassword = async function(candidatePassword) {
-    await isHashMatching(candidatePassword, this.password);
+    return await isHashMatching(candidatePassword, this.password);
 } 
 
 User.plugin(mongodbErrorHandler);

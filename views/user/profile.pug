@@ -1,0 +1,9 @@
+extends ../master
+
+block content
+    h1.text-center!= `${resourceUser.username}`
+    if(user.username == resourceUser.username)
+        a.text-center.edit-user(href=`/users/${user.username}/edit`)
+            i.fa.fa-pencil
+            span.fa-padding-left-from-icon Edit your profile
+    p.text-center!= resourceUser.bio ? resourceUser.bio : 'This user has no bio!'

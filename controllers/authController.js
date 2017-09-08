@@ -35,7 +35,8 @@ const signup = async (req, res) => {
         
     const user = new User({
         username,
-        password
+        password,
+        isAdmin: 0
     });
     await user.save();
 

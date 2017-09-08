@@ -1,9 +1,100 @@
+$orangeRed: #fb6e5a;
+
 h1 {
     font-family: 'Rubik', sans-serif;
     font-weight: 700;
     letter-spacing: 1px;
+    padding-bottom: 10px;
+    font-size: 1.8em;
+    position: relative;
+}
+
+.fa-padding-left-from-icon {
+    padding-left: 5px;
+}
+
+a {
+    color: $orangeRed;
+    &:visited, &:active {
+        color: $orangeRed;
+    }
+}
+
+.navbar-nav {
+    flex-direction: row;
+}
+
+.nav-item {
+    padding: 0px 10px;
+    font-family: 'Roboto Mono', sans-serif;
+    a {
+        color: $orangeRed;
+    }
+}
+.navbar-brand {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 700;
+    color: $orangeRed;
+}
+
+.edit-user {
+    display: block;
+    top: 10px;
+    right: 10px;
+    font-size: 0.9em;
+    margin-bottom: 15px;
 }
 
 .content {
     padding-top: 50px;
+}
+
+.flash__wrapper {
+    width: 80%;
+    min-height: 20px;
+    border-radius: 15px;
+    margin: 8px auto 0px auto;
+
+    a {
+        color: blue;
+
+        &:visited, &:hover {
+            color: blue;
+        }
+    }
+
+    .flash {
+        color: #fff;
+        line-height: 20px;
+
+        .flash__text {
+            max-width: 75%;
+            font-family: 'Roboto Mono', sans-serif;
+            line-height: 20px;
+            padding: 10px 0px;
+            font-size: 0.8em;
+        }
+
+        button {
+            float: right;
+            font-size: 1em;
+        }
+
+        span {
+            display: inline-block;
+        }
+
+        .flash__remove {
+            
+            float: right;
+            cursor: pointer;
+            font-size: 1.3em;
+            line-height: 40px;
+        }
+    }
+
+    &.flash--error { background-color: #ff6651; }
+    &.flash--success { background-color: #8affa4; }
+    &.flash--info { background-color: #3ec8ff; }
+
 }

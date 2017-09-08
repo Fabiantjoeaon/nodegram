@@ -72,11 +72,64 @@
 
 __webpack_require__(1);
 
+var _bling = __webpack_require__(3);
+
+window.onload = function () {
+
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
+
+    /**
+     * Removes flash wrapper on 
+     * flash message click by ID
+     */
+    var removeFlashMessage = function removeFlashMessage() {
+        if ((0, _bling.$)('.flash__wrapper')) {
+            var flashRemoves = (0, _bling.$$)('.flash__remove');
+            flashRemoves.forEach(function (remove) {
+                remove.on('click', function (e) {
+                    var id = e.target.getAttribute('data-flash');
+                    (0, _bling.$)('.flash__wrapper--' + id).remove();
+                });
+            });
+        }
+    };
+    removeFlashMessage();
+};
+
 /***/ }),
 /* 1 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 2 */,
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var $ = document.querySelector.bind(document);
+var $$ = document.querySelectorAll.bind(document);
+
+Node.prototype.on = window.on = function (name, fn) {
+    this.addEventListener(name, fn);
+};
+
+NodeList.prototype.__proto__ = Array.prototype;
+
+NodeList.prototype.on = NodeList.prototype.addEventListener = function (name, fn) {
+    this.forEach(function (elem, i) {
+        elem.on(name, fn);
+    });
+};
+
+exports.$ = $;
+exports.$$ = $$;
 
 /***/ })
 /******/ ]);

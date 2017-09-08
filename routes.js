@@ -3,6 +3,7 @@ const authController = require('./controllers/authController');
 const userController = require('./controllers/userController');
 const webController = require('./controllers/webController');
 const {ensureLoggedIn, ensureLoggedOut} = require('./middleware/authMiddleware');
+const {filterPhoto, resizeAndWritePhoto} = require('./middleware/authMiddleware');
 
 module.exports = (app, passport) => {
     /**
@@ -14,7 +15,8 @@ module.exports = (app, passport) => {
     app.post('/auth/login', ensureLoggedOut, passport.authenticate('local', {
         successRedirect : '/',
         failureRedirect : '/auth/login',
-        failureFlash : true 
+        failureFlash : true,
+        successFlash: true 
     }))
     app.get('/auth/logout', ensureLoggedIn, authController.logout);
 
@@ -27,6 +29,10 @@ module.exports = (app, passport) => {
      * USER
      */
     app.get('/users/:username', ensureLoggedIn, userController.show);
+    app.get('/users/:username/edit', ensureLoggedIn, userController.showEdit);
+    app.post('/users/:username/edit', ensureLoggedIn, 
+        filterPhoto, catchErrors(resizeAndWritePhoto), 
+        userController.edit);
 }
 
 
