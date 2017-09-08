@@ -24,8 +24,7 @@ const write = async (file, name) => {
         fs.mkdirSync(monthPath);
     }
 
-    await file.write(`${monthPath}/${name}`);
-    
+    await file.write(`${monthPath}/${name}`); 
     return `${getYear(date)}/${getMonth(date)}/${name}`;
 }
 
@@ -72,7 +71,7 @@ const resizeAndWritePhoto = async (req, res, next) => {
         await photo.resize(parseInt(process.env.RESIZE_AVATAR_SIZE), jimp.AUTO);
     }
 
-    req.body.photo = await write(photo, name);
+    req.body.url = await write(photo, name);
 
     next();
 }

@@ -1,0 +1,21 @@
+extends ../master
+
+block content
+    h1.text-center New photo
+    
+    .col-xs-4
+    .col-xs-4
+        form(action=`/photos/new` id='newPhotoForm' method='POST' enctype='multipart/form-data')
+            .form-group
+                label(for="photo") Photo
+                input.form-control(type="file" name="photo" accept="image/png, image/jpeg")
+
+            .form-group
+                label(for='description') Description
+                textarea.form-control(form="newPhotoForm" rows="5" name="description") 
+            
+            input(type='hidden' value=user.username name='username')
+
+            .form-group
+                input.button.button-info.form-control(type='submit' name='submit')
+    .col-xs-4

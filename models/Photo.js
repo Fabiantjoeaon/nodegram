@@ -12,6 +12,10 @@ const Photo = new Schema({
         type: Schema.Types.ObjectId, 
         ref: 'User'
     },
+    uuid: {
+        type: String,
+        unique: true
+    },
     description: {
         type: String,
         unique: true,
@@ -20,7 +24,7 @@ const Photo = new Schema({
         index: { unique: true }
     },
     likes: {
-        type: Integer
+        type: Number
     },
     url: {
         type: String
@@ -33,6 +37,6 @@ Photo.statics.getInitialConstraints = () => ({
 });
 
 
-User.plugin(mongodbErrorHandler);
+Photo.plugin(mongodbErrorHandler);
 
 module.exports = mongoose.model('Photo', Photo);
