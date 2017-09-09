@@ -4,14 +4,15 @@ const uuid = require('uuid');
 
 const create = async (req, res) => {
     req.body.description = req.sanitize(req.body.description);
-    const {description, url, username} = req.body;
+    const {description, url} = req.body;
 
-    const user = await User.findOne({username});
+    const user = await User.findOne({username: req.user.username});
+
     const photo = new Photo({
+        author: user._id,
         description,
         url,
-        uuid: uuid(),
-        likes: 0
+        uuid: uuid()
     });
 
     await photo.save();
@@ -29,7 +30,8 @@ const showCreate = (req, res) => {
 }
 
 const show = async (req, res) => {
-    const photo = await Photo.findOne({uuid: req.params.uuid});
+    const photo = await 
+        Photo.findOne({uuid: req.params.uuid}).populate('author');
     // const user = await User.findOne({username: req.params.uuid});
     return res.render('photo/show', {
         //TODO: Get user by photo

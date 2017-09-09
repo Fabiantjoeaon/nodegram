@@ -8,7 +8,7 @@ const Schema = mongoose.Schema;
 mongoose.Promise = global.Promise;
 
 const Photo = new Schema({
-    userID: {
+    author: {
         type: Schema.Types.ObjectId, 
         ref: 'User'
     },
@@ -20,9 +20,12 @@ const Photo = new Schema({
     description: {
         type: String
     },
-    likes: {
-        type: Number
-    },
+    likes: [{
+        likedBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    }],
     url: {
         type: String
     },

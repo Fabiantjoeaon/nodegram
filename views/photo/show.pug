@@ -1,7 +1,14 @@
 extends ../master
 
 block content
+    - const isThisUser = user.username == photo.author.username;
     .photo-single
+        .photo-single__top 
+            strong!= `Photo by <a href='/users/${photo.author.username}'>${photo.author.username}</a>`
+            if(isThisUser)
+                a(href=`/photos/${photo.uuid}/delete`)
+                    i.fa.fa-trash
+                    span.fa-padding-left-from-icon Delete
         .photo-single__photo(
             style=`background-image:url('/uploads/${photo.url}');`
         )
@@ -9,5 +16,12 @@ block content
             .photo-single__description
                 p!= photo.description.length > 1 ? photo.description : 'No description'
             .photo-single__likes
-                i.fa.fa-heart
-                span.fa-padding-left-from-icon #{photo.likes}
+                if(!isThisUser)
+                    form(action=`/photos/${photo.uuid}/like` method='POST')
+                        button(type='submit' name='submit' )
+                            i.fa.fa-heart
+                            span.fa-padding-left-from-icon #{photo.likes.length}
+                        
+                else 
+                    i.fa.fa-heart
+                    span.fa-padding-left-from-icon #{photo.likes.length}

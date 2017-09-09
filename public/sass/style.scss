@@ -125,14 +125,17 @@ p {
         background-size: contain;
         background-position: center;
         background-repeat: no-repeat;
+        background-color: #D5D5D5;
     }
 
-    .photo-single__bottom {
+    .photo-single__top, .photo-single__bottom {
         padding: 15px 5px;
-
+        font-family: 'Roboto Mono', sans-serif;
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-between;
+    }
+    .photo-single__bottom {
 
         .photo-single__description {
             max-width: 70%;
