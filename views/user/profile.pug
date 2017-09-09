@@ -2,11 +2,27 @@ extends ../master
 
 block content
     - const isThisUser = user.username == resourceUser.username;
+    - const isAlreadyFollower = resourceUser.followers.some(f => String(f._id) == String(user._id));
+
+    .profile__follow 
+        if(!isAlreadyFollower && !isThisUser)
+            a.btn.btn-primary(href=`/users/${resourceUser.username}/follow`)
+                span Follow
+
+        else if(isAlreadyFollower && !isThisUser)
+            a.btn.btn-danger(href=`/users/${resourceUser.username}/unfollow`)
+                span Unfollow
+
     .profile__avatar.avatar(
         style= resourceUser.avatar ? `background-image:url('/uploads/${resourceUser.avatar}')` : null 
         class= !resourceUser.avatar ? 'avatar--placeholder placeholder--resourceUser' : null
         data-name=resourceUser.username)
     h1.text-center!= `${resourceUser.username}`
+    .profile__followers 
+        a(href=`/users/${resourceUser}/followers`)
+            strong!= `${resourceUser.followers.length} followers`
+        a(href=`/users/${resourceUser}/following`)
+            strong!= `${resourceUser.following.length} following`
     if(user.username == resourceUser.username)
         a.text-center.edit-user(href=`/users/${user.username}/edit`)
             i.fa.fa-pencil

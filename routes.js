@@ -39,6 +39,10 @@ module.exports = (app, passport) => {
     app.post('/users/:username/edit', ensureLoggedIn, 
         filterAvatar, catchErrors(resizeAndWriteAvatar), 
         userController.edit);
+    app.get('/users/:username/follow', ensureLoggedIn, catchErrors(userController.follow));
+    app.get('/users/:username/unfollow', ensureLoggedIn, catchErrors(userController.unfollow));
+    app.get('/users/:username/followers', ensureLoggedIn, catchErrors(userController.showFollowers));
+    app.get('/users/:username/following', ensureLoggedIn, catchErrors(userController.showFollowing));
 
     /**
      * PHOTO
@@ -50,17 +54,17 @@ module.exports = (app, passport) => {
     app.get('/photos/:uuid', ensureLoggedIn, 
         photoController.show);
     app.post('/photos/:uuid/like', ensureLoggedIn, 
-        photoController.like);
+        catchErrors(photoController.like));
     app.post('/photos/:uuid/comment', ensureLoggedIn, 
-        photoController.comment);
+        catchErrors(photoController.comment));
     app.get('/photos/:uuid/likes', ensureLoggedIn, 
         photoController.showLikes);
     app.get('/photos/:uuid/comments', ensureLoggedIn, 
         photoController.showComments);
     app.get('/photos/:uuid/delete', ensureLoggedIn, 
-        photoController.destroy);
+        catchErrors(photoController.destroy));
     app.get('/photos/:uuid/delete-comment/:comment_id', ensureLoggedIn, 
-        photoController.destroyComment);
+        catchErrors(photoController.destroyComment));
     
 }
 

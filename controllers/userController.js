@@ -55,11 +55,74 @@ const edit = async (req, res) => {
     });
 
     req.flash('success', 'Succesfully updated your profile');
-    return res.redirect(`/users/${req.params.username}`)
+    return res.redirect(`/users/${req.params.username}`);
+}
+
+/**
+*
+* @param {Object} req 
+* @param {Object} res 
+* @returns {}
+*/
+const follow = async (req, res) => {
+    const userToFollow = await User.findOne({
+        username: req.params.username
+    });
+    const userFollowing = await User.findOne({
+        username: req.user.username
+    });
+    
+    if(userToFollow.followers
+        .some(user => String(user._id) == String(userFollowing._id))) {
+            req.flash('error', `You are already following ${req.params.username}!`)
+            return res.redirect('back');
+    }
+
+    userToFollow.followers.push({_id: userFollowing._id});
+    userFollowing.following.push({_id: userToFollow._id});
+    await userToFollow.save();
+    await userFollowing.save();
+
+    req.flash('success', `You are now following ${req.params.username}!`)
+    return res.redirect(`/users/${req.params.username}`);
+}
+
+/**
+*
+* @param {Object} req 
+* @param {Object} res 
+* @returns {}
+*/
+const unfollow = async (req, res) => {
+
+}
+
+/**
+*
+* @param {Object} req 
+* @param {Object} res 
+* @returns {}
+*/
+const showFollowers = async (req, res) => {
+
+}
+
+/**
+*
+* @param {Object} req 
+* @param {Object} res 
+* @returns {}
+*/
+const showFollowing = async (req, res) => {
+
 }
 
 module.exports = {
     show,
     showEdit,
-    edit
+    edit,
+    follow,
+    unfollow,
+    showFollowers,
+    showFollowing
 }
