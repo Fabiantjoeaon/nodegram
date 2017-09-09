@@ -7,7 +7,7 @@ block content
     .photo-single
         .photo-single__top 
             strong!= `Photo by <a href='/users/${photo.author.username}'>${photo.author.username}</a>`
-            if(isThisUser)
+            if(isThisUser || user.isAdmin)
                 a(href=`/photos/${photo.uuid}/delete`)
                     i.fa.fa-trash
                     span.fa-padding-left-from-icon Delete
@@ -18,9 +18,10 @@ block content
             .photo-single__description
                 p!= photo.description.length > 1 ? photo.description : 'No description'
             .photo-single__likes
-                a.photo-single__show-likes(
-                    href=`/photos/${photo.uuid}/likes`
-                ) See who liked this photo
+                if(photo.likes.length > 0)
+                    a.photo-single__show-likes(
+                        href=`/photos/${photo.uuid}/likes`
+                    ) See who liked this photo
                 if(!isThisUser && !alreadyLiked)
                     form(action=`/photos/${photo.uuid}/like` method='POST').photo-single__like-form
                         button(type='submit' name='submit' )
@@ -33,11 +34,26 @@ block content
 
         .photo-single__comments
             each comment in photo.comments 
-                - console.log(comment.postedBy)
-                p #{comment.text}
+                - const {username, avatar} = comment.postedBy;
+                - const isCommentUser = username == user.username;
+                .photo-single__comment
+                    .small__avatar.avatar(
+                        style= avatar ? `background-image:url('/uploads/${avatar}')` : null 
+                        class= !avatar ? 'avatar--placeholder' : null
+                        data-name=username)
+                    .photo-single__comment-text-wrapper
+                        a(href=`/users/${username}`)
+                            strong #{username}
+                        p #{comment.text}
+                    .photo-single__comment-actions
+                        if(isThisUser || isCommentUser || user.isAdmin)
+                            a(href=`/photos/${photo.uuid}/delete-comment/${comment.id}`)
+                                i.fa.fa-trash
             
             form(action=`/photos/${photo.uuid}/comment`, method='POST').photo-single__comment-form
-                input(type='text' name='text' placeholder='Say something nice...')
-                button(type='submit' name='submit')
-                    span Comment
+                .form-group
+                    input.form-control(type='text' name='text' placeholder='Say something nice...')
+                .form-group 
+                    button.button.btn(type='submit' name='submit')
+                        span Comment
 

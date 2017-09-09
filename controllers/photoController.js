@@ -79,6 +79,26 @@ const comment = async (req, res) => {
     return res.redirect(`/photos/${req.params.uuid}`);
 }
 
+const destroyComment = async (req, res) => {
+    const photo = await 
+        Photo.findOne({uuid: req.params.uuid});
+    photo.comments.pull({_id: req.params.comment_id});
+    await photo.save();
+
+    req.flash('success', 'Your comment has been removed!');
+    return res.redirect(`/photos/${req.params.uuid}`);
+}
+
+/**
+*
+* @param {Object} req 
+* @param {Object} res 
+* @returns {}
+*/
+const destroy = async (req, res) => {
+
+}
+
 /**
 *
 * @param {Object} req 
@@ -100,5 +120,7 @@ module.exports = {
     like,
     showLikes,
     comment,
-    showComments
+    showComments,
+    destroy,
+    destroyComment
 }

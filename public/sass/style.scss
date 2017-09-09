@@ -36,7 +36,7 @@ a {
     background-color: $orangeRed;
 
     .placeholder__letter {
-        font-size: 5em;
+        
         font-family: 'Rubik', sans-serif;
         font-weight: 700;
     
@@ -50,7 +50,13 @@ a {
     height: 200px;
     position: relative;
     margin: 0px auto 30px auto;
+
+    .placeholder__letter {
+        font-size: 5em;
+    }
 }
+
+
 
 .edit__avatar {
     width: 100px;
@@ -88,6 +94,15 @@ p {
     margin-bottom: 15px;
 
     font-family: 'Roboto Mono', sans-serif;
+}
+
+.small__avatar {
+    width: 50px;
+    height: 50px;
+    
+    .placeholder__letter {
+        font-size: 1.4em;
+    }
 }
 
 .photo-grid__container {
@@ -209,6 +224,37 @@ p {
             max-width: 70%;
             word-break: break-word;
         }
+    }
+
+    .photo-single__comments {
+        padding-top: 20px;
+        width: 95%;
+        margin: 0 auto 50px auto;
+
+        form {
+            margin-top: 30px;
+        }
+
+        .photo-single__comment {
+            display: flex;
+            flex-flow: row nowrap;
+            margin-bottom: 10px;
+            padding: 10px 20px;
+            border-radius: 15px;
+            border: 1px solid $orangeRed;
+
+            p {
+                margin-bottom: 0px;
+            }
+            .avatar {
+                margin-right: 10px;
+            }
+
+            .photo-single__comment-actions {
+                margin-left: auto;
+            }
+        }
+        
     }
 }
 
