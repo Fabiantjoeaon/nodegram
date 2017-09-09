@@ -13,10 +13,20 @@ block content
             span.fa-padding-left-from-icon Edit your profile
     p.text-center!= resourceUser.bio ? resourceUser.bio : 'This user has no bio!'
 
-    if(!resourceUser.photos || resourceUser.photos.length == 0)
-        h2!= `${isThisUser ? 'You' : resourceUser.username} ${isThisUser ? 'have' : 'has'} no photos yet!`
-        if(isThisUser)
-            a(href='/photos/new') Upload a new photo
-            
-    else 
+    .photo-grid__container
+        if(!resourceUser.userPhotos || resourceUser.userPhotos.length == 0)
+            h2!= `${isThisUser ? 'You' : resourceUser.username} ${isThisUser ? 'have' : 'has'} no photos yet!`
+            if(isThisUser)
+                a(href='/photos/new') Upload a new photo
+
+        else 
+            if(isThisUser)
+                a(href='/photos/new').text-right Upload a new photo
+            .photo-grid
+                each photo in resourceUser.userPhotos
+                    a(
+                        href=`/photos/${photo.uuid}`
+                        style=`background-image:url('/uploads/${photo.url}')`
+                    ).photo-grid__photo
+
     

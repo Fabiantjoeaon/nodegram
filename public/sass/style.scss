@@ -9,6 +9,10 @@ h1 {
     position: relative;
 }
 
+.content {
+    padding: 35px 0px 70px 0px;
+}
+
 .fa-padding-left-from-icon {
     padding-left: 5px;
 }
@@ -78,14 +82,63 @@ p {
     display: block;
     top: 10px;
     right: 10px;
+    width: 100px;
+    margin: 0 auto;
     font-size: 0.9em;
     margin-bottom: 15px;
 
     font-family: 'Roboto Mono', sans-serif;
 }
 
-.content {
-    padding-top: 50px;
+.photo-grid__container {
+    width: 90%;
+    margin: 50px auto 0px auto;
+    .photo-grid {
+        width: 100%;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+        .photo-grid__photo {
+            background-size: cover;
+            background-position: center;
+            display: block;
+            margin: 4px;
+            height: 250px;
+            width: calc(33% - 8px);
+        }
+    }
+}
+
+.photo-single {
+    margin: 0 auto;
+    width: 800px;
+    height: 800px;
+    .photo-single__photo {
+        
+        width: 100%;
+
+        height: 0;
+        padding-top: 66.64%;
+        max-width: 800px;
+        // max-height: 800px;
+        
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .photo-single__bottom {
+        padding: 15px 5px;
+
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+
+        .photo-single__description {
+            max-width: 70%;
+            word-break: break-word;
+        }
+    }
 }
 
 .flash__wrapper {

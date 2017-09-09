@@ -47,7 +47,7 @@ module.exports = (app, passport) => {
     app.post('/photos/new', ensureLoggedIn, 
         filterPhoto, catchErrors(resizeAndWritePhoto), 
         photoController.create);
-    app.get('/photos/:id', ensureLoggedIn, 
+    app.get('/photos/:uuid', ensureLoggedIn, 
         photoController.show);
     
 }

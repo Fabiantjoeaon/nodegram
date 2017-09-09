@@ -1,9 +1,14 @@
 const User = require('../models/User');
 const getUpdatedFields = require('../helpers/getUpdatedFields');
 
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ */
 const show = async (req, res) => {
     const resourceUser = 
-        await User.findOne({'username': req.params.username});
+        await User.findOne({'username': req.params.username}).populate('userPhotos');
     
     return res.render('user/profile', {
         title: `${resourceUser.username}`,
@@ -11,6 +16,11 @@ const show = async (req, res) => {
     });
 }
 
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ */
 const showEdit = async (req, res) => {
     const resourceUser = 
         await User.findOne({'username': req.params.username});
@@ -21,6 +31,11 @@ const showEdit = async (req, res) => {
     });
 }
 
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ */
 const edit = async (req, res) => {
     //TODO: No find one and update as u need resource here?
     // if (req.body.delete_avatar) {

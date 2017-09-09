@@ -10,7 +10,8 @@ const create = async (req, res) => {
     const photo = new Photo({
         description,
         url,
-        uuid: uuid()
+        uuid: uuid(),
+        likes: 0
     });
 
     await photo.save();
@@ -18,8 +19,7 @@ const create = async (req, res) => {
     await user.save();
 
     req.flash('success', 'Succesfully uploaded photo!');
-    //TODO: Link to photo
-    return res.redirect(`/users/${username}`);
+    return res.redirect(`/photos/${photo.uuid}`);
 }
 
 const showCreate = (req, res) => {
@@ -29,8 +29,14 @@ const showCreate = (req, res) => {
 }
 
 const show = async (req, res) => {
-
-}
+    const photo = await Photo.findOne({uuid: req.params.uuid});
+    // const user = await User.findOne({username: req.params.uuid});
+    return res.render('photo/show', {
+        //TODO: Get user by photo
+        title: 'Photo by',
+        photo
+    })
+}  
 
 module.exports = {
     create, 

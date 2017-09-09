@@ -1,0 +1,13 @@
+extends ../master
+
+block content
+    .photo-single
+        .photo-single__photo(
+            style=`background-image:url('/uploads/${photo.url}');`
+        )
+        .photo-single__bottom
+            .photo-single__description
+                p!= photo.description.length > 1 ? photo.description : 'No description'
+            .photo-single__likes
+                i.fa.fa-heart
+                span.fa-padding-left-from-icon #{photo.likes}

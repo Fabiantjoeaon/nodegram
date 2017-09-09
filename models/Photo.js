@@ -14,21 +14,25 @@ const Photo = new Schema({
     },
     uuid: {
         type: String,
-        unique: true
+        unique: true,
+        index: { unique: true }
     },
     description: {
-        type: String,
-        unique: true,
-        lowercase: true,
-        trim: true,
-        index: { unique: true }
+        type: String
     },
     likes: {
         type: Number
     },
     url: {
         type: String
-    }
+    },
+    comments: [{
+        text: String,
+        postedBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    }]
 });
 
 
@@ -37,6 +41,6 @@ Photo.statics.getInitialConstraints = () => ({
 });
 
 
-Photo.plugin(mongodbErrorHandler);
+// Photo.plugin(mongodbErrorHandler);
 
 module.exports = mongoose.model('Photo', Photo);
