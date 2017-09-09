@@ -28,5 +28,13 @@ block content
                         href=`/photos/${photo.uuid}`
                         style=`background-image:url('/uploads/${photo.url}')`
                     ).photo-grid__photo
+                        .photo-grid__overlay 
+                            .photo-grid__info 
+                                .photo-grid__comments 
+                                    i.fa.fa-comment
+                                    span.fa-padding-left-from-icon!=photo.comments.length
+                                .photo-grid__likes 
+                                    i.fa.fa-heart
+                                    span.fa-padding-left-from-icon!=photo.likes.length
 
     

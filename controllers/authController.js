@@ -47,6 +47,7 @@ const signup = async (req, res) => {
 const logout = async (req, res) => {
     req.logout();
     req.session.user = null;
+    res.locals.user = null;
     req.flash('success', 'You are now logged out!');
     res.redirect('/');
 }

@@ -2,6 +2,8 @@ extends ../master
 
 block content
     - const isThisUser = user.username == photo.author.username;
+    - const alreadyLiked = photo.likes.some(like => String(like.likedBy) === String(user._id));
+
     .photo-single
         .photo-single__top 
             strong!= `Photo by <a href='/users/${photo.author.username}'>${photo.author.username}</a>`
@@ -16,12 +18,26 @@ block content
             .photo-single__description
                 p!= photo.description.length > 1 ? photo.description : 'No description'
             .photo-single__likes
-                if(!isThisUser)
-                    form(action=`/photos/${photo.uuid}/like` method='POST')
+                a.photo-single__show-likes(
+                    href=`/photos/${photo.uuid}/likes`
+                ) See who liked this photo
+                if(!isThisUser && !alreadyLiked)
+                    form(action=`/photos/${photo.uuid}/like` method='POST').photo-single__like-form
                         button(type='submit' name='submit' )
                             i.fa.fa-heart
                             span.fa-padding-left-from-icon #{photo.likes.length}
                         
                 else 
-                    i.fa.fa-heart
+                    i.fa.fa-heart(class=alreadyLiked ? 'liked' : '')
                     span.fa-padding-left-from-icon #{photo.likes.length}
+
+        .photo-single__comments
+            each comment in photo.comments 
+                - console.log(comment.postedBy)
+                p #{comment.text}
+            
+            form(action=`/photos/${photo.uuid}/comment`, method='POST').photo-single__comment-form
+                input(type='text' name='text' placeholder='Say something nice...')
+                button(type='submit' name='submit')
+                    span Comment
+

@@ -102,9 +102,45 @@ p {
             background-size: cover;
             background-position: center;
             display: block;
+            position: relative;
             margin: 4px;
             height: 250px;
             width: calc(33% - 8px);
+
+            &:hover {
+                .photo-grid__overlay {
+                    opacity: 1;
+                }
+            }
+        }
+
+        .photo-grid__overlay {
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 2;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 0.3s ease-out;
+
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: center;
+            align-items: center;
+
+            .photo-grid__info {
+                width: 30%;
+                display: flex;
+                flex-flow: row nowrap;
+                justify-content: space-between;
+                font-size: 1em;
+                color: #fff;
+                font-family: 'Roboto Mono', sans-serif;
+
+                
+            }
         }
     }
 }
@@ -136,12 +172,48 @@ p {
         justify-content: space-between;
     }
     .photo-single__bottom {
+        .photo-single__likes {
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: space-between;
+
+            i, span {
+                display: inline;
+                vertical-align: text-top;
+            }
+        }
+        .photo-single__show-likes {
+            font-size: 0.8em;
+            color: #fff;
+            height: 30px;
+            background-color: $orangeRed;
+            padding: 5px 10px;
+            margin-right: 10px;
+            transition: all 0.3s ease-out;
+            &:hover {
+                background-color: #fff;
+                color: $orangeRed;
+            }
+        }
+
+        .photo-single__like-form {
+            button {
+                border-width: 0px;
+                color: #fff;
+                background-color: $orangeRed;
+                cursor: pointer;
+            }
+        }
 
         .photo-single__description {
             max-width: 70%;
             word-break: break-word;
         }
     }
+}
+
+.liked {
+    color: $orangeRed;
 }
 
 .flash__wrapper {

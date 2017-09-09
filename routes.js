@@ -49,6 +49,14 @@ module.exports = (app, passport) => {
         photoController.create);
     app.get('/photos/:uuid', ensureLoggedIn, 
         photoController.show);
+    app.post('/photos/:uuid/like', ensureLoggedIn, 
+        photoController.like);
+    app.post('/photos/:uuid/comment', ensureLoggedIn, 
+        photoController.comment);
+    app.get('/photos/:uuid/likes', ensureLoggedIn, 
+        photoController.showLikes);
+    app.get('/photos/:uuid/comments', ensureLoggedIn, 
+        photoController.showComments);
     
 }
 
