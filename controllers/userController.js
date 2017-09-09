@@ -73,9 +73,9 @@ const follow = async (req, res) => {
     });
     
     if(userToFollow.followers
-        .some(user => String(user._id) == String(userFollowing._id))) {
+        .some(userId => String(userId) == String(userFollowing._id))) {
             req.flash('error', `You are already following ${req.params.username}!`)
-            return res.redirect('back');
+            return res.redirect(`/users/${req.params.username}`);
     }
 
     userToFollow.followers.push({_id: userFollowing._id});
@@ -94,7 +94,26 @@ const follow = async (req, res) => {
 * @returns {}
 */
 const unfollow = async (req, res) => {
+    const userToUnfollow = await User.findOne({
+        username: req.params.username
+    });
+    const userUnfollowing = await User.findOne({
+        username: req.user.username
+    });
+    
+    if(!userToUnfollow.followers
+        .some(userId => String(userId) == String(userUnfollowing._id))) {
+            req.flash('error', `You are not following ${req.params.username}!`)
+            return res.redirect(`/users/${req.params.username}`);
+    }
 
+    userToUnfollow.followers.pull({_id: userUnfollowing._id});
+    userUnfollowing.following.pull({_id: userToUnfollow._id});
+    await userToUnfollow.save();
+    await userUnfollowing.save();
+
+    req.flash('success', `You are now unfollowing ${req.params.username}!`)
+    return res.redirect(`/users/${req.params.username}`);
 }
 
 /**

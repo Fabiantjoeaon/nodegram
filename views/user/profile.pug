@@ -2,7 +2,7 @@ extends ../master
 
 block content
     - const isThisUser = user.username == resourceUser.username;
-    - const isAlreadyFollower = resourceUser.followers.some(f => String(f._id) == String(user._id));
+    - const isAlreadyFollower = resourceUser.followers.some(fId => String(fId) === String(user._id))
 
     .profile__follow 
         if(!isAlreadyFollower && !isThisUser)
