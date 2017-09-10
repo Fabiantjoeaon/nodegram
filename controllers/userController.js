@@ -10,6 +10,11 @@ const show = async (req, res) => {
     const resourceUser = 
         await User.findOne({'username': req.params.username}).populate('userPhotos');
     
+    if(!resourceUser) {
+        req.flash('error', 'No user found.');
+        return res.redirect('/404');
+    }
+    
     return res.render('user/profile', {
         title: `${resourceUser.username}`,
         resourceUser: resourceUser
@@ -24,6 +29,11 @@ const show = async (req, res) => {
 const showEdit = async (req, res) => {
     const resourceUser = 
         await User.findOne({'username': req.params.username});
+    
+    if(!resourceUser) {
+        req.flash('error', 'No user found.');
+        return res.redirect('/404');
+    }
 
     return res.render('user/edit', {
         title: `edit`,
@@ -46,13 +56,18 @@ const edit = async (req, res) => {
     //         req.session.user.avatar = null;
     // }
 
-    await User.findOneAndUpdate({
+    const user = await User.findOneAndUpdate({
         'username': req.params.username
     }, {
         username: req.body.username,
         avatar: req.body.avatar,
         bio: req.body.bio
     });
+
+    if(!user) {
+        req.flash('error', 'No user found.');
+        return res.redirect('/404');
+    }
 
     req.flash('success', 'Succesfully updated your profile');
     return res.redirect(`/users/${req.params.username}`);
@@ -71,6 +86,11 @@ const follow = async (req, res) => {
     const userFollowing = await User.findOne({
         username: req.user.username
     });
+
+    if(!userToFollow || !userFollowing) {
+        req.flash('error', 'No user found.');
+        return res.redirect('/404');
+    }
     
     if(userToFollow.followers
         .some(userId => String(userId) == String(userFollowing._id))) {
@@ -100,6 +120,11 @@ const unfollow = async (req, res) => {
     const userUnfollowing = await User.findOne({
         username: req.user.username
     });
+
+    if(!userToUnfollow || !userUnfollowing) {
+        req.flash('error', 'No user found.');
+        return res.redirect('/404');
+    }
     
     if(!userToUnfollow.followers
         .some(userId => String(userId) == String(userUnfollowing._id))) {

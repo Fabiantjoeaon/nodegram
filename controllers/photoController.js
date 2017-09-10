@@ -38,6 +38,11 @@ const show = async (req, res) => {
             {path: 'comments.postedBy', select: 'username avatar'}
         ]);
 
+    if(!photo) {
+        req.flash('error', 'No photo found.');
+        return res.redirect('/404');
+    }
+
     return res.render('photo/show', {
         title: 'Photo by',
         photo
@@ -46,7 +51,19 @@ const show = async (req, res) => {
 
 const like = async (req, res) => {
     const photo = await 
-        Photo.findOne({uuid: req.params.uuid});
+        Photo.findOne({uuid: req.params.uuid}).populate('author');
+    
+    if(!photo) {
+        req.flash('error', 'No photo found.');
+        return res.redirect('/404');
+    }
+
+    if(photo.likes
+        .some(likedBy => String(likedBy._id) == String(req.user._id))) {
+            req.flash('error', 'You have already liked this photo!');
+            return res.redirect('back');
+    }
+
     photo.likes.push({likedBy: req.user._id});
     await photo.save();
 
@@ -69,6 +86,12 @@ const comment = async (req, res) => {
 
     const photo = await 
         Photo.findOne({uuid: req.params.uuid});
+
+    if(!photo) {
+        req.flash('error', 'No photo found.');
+        return res.redirect('/404');
+    }
+
     photo.comments.push({
         text: req.body.text,
         postedBy: req.user._id
@@ -82,6 +105,12 @@ const comment = async (req, res) => {
 const destroyComment = async (req, res) => {
     const photo = await 
         Photo.findOne({uuid: req.params.uuid});
+    
+    if(!photo) {
+        req.flash('error', 'No photo found.');
+        return res.redirect('/404');
+    }
+
     photo.comments.pull({_id: req.params.comment_id});
     await photo.save();
 
@@ -96,7 +125,20 @@ const destroyComment = async (req, res) => {
 * @returns {}
 */
 const destroy = async (req, res) => {
+    const photo = await 
+        Photo.findOneAndRemove({uuid: req.params.uuid});
+    
+    if(!photo) {
+        req.flash('error', 'No photo found.');
+        return res.redirect('/404');
+    }
+    
+    const user = await User.findOne({username: req.user.username});
+    user.userPhotos.pull({uuid: req.params.uuid});
+    await user.save();
 
+    req.flash('success', 'Your photo has been removed!');
+    return res.redirect(`/users/${req.user.username}`)
 }
 
 /**

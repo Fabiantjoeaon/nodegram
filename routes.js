@@ -51,6 +51,15 @@ module.exports = (app, passport) => {
     app.post('/photos/new', ensureLoggedIn, 
         filterPhoto, catchErrors(resizeAndWritePhoto), 
         photoController.create);
+
+    app.use('/photos/:uuid', (req, res, next) => {
+        if(!req.params.uuid) {
+            req.flash('error', 'No photo found.');
+            return res.redirect('404');
+        }
+
+        return next();
+    });
     app.get('/photos/:uuid', ensureLoggedIn, 
         photoController.show);
     app.post('/photos/:uuid/like', ensureLoggedIn, 
@@ -66,6 +75,10 @@ module.exports = (app, passport) => {
     app.get('/photos/:uuid/delete-comment/:comment_id', ensureLoggedIn, 
         catchErrors(photoController.destroyComment));
     
+    app.get('*', (req, res) => {
+        return res.render('404', {title: 'Not found'});
+    });
+          
 }
 
 
