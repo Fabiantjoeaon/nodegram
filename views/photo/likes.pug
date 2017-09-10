@@ -1,0 +1,17 @@
+extends ../master
+
+block content
+    h2 
+        a(href=`/photos/${photo.uuid}`) Back to photo
+    .likes
+        each like in photo.likes 
+            - const username = like.likedBy.username;
+            .like
+                .small__avatar.avatar(
+                    style= avatar ? `background-image:url('/uploads/${avatar}')` : null 
+                    class= !avatar ? 'avatar--placeholder' : null
+                    data-name=username)
+                a(href=`/users/${username}`)
+                    span.liked-by!= username
+                    i.fa.fa-heart
+

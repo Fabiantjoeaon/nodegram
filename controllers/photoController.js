@@ -1,6 +1,5 @@
 const Photo = require('../models/Photo');
 const User = require('../models/User');
-const uuid = require('uuid');
 
 const create = async (req, res) => {
     req.body.description = req.sanitize(req.body.description);
@@ -12,7 +11,7 @@ const create = async (req, res) => {
         author: user._id,
         description,
         url,
-        uuid: uuid()
+        uuid: req.uuid
     });
 
     await photo.save();
@@ -46,7 +45,7 @@ const show = async (req, res) => {
     return res.render('photo/show', {
         title: 'Photo by',
         photo
-    })
+    });
 }  
 
 const like = async (req, res) => {
@@ -151,8 +150,26 @@ const showComments = async (req, res) => {
 
 }
 
+/**
+*
+* @param {Object} req 
+* @param {Object} res 
+* @returns {}
+*/
 const showLikes = async (req, res) => {
+    const photo = await 
+        Photo.findOne({uuid: req.params.uuid})
+        .populate('likes.likedBy');
 
+    if(!photo) {
+        req.flash('error', 'No photo found.');
+        return res.redirect('/404');
+    }
+    
+    return res.render('photo/likes', {
+        title: 'Likes',
+        photo
+    });
 }
 
 module.exports = {

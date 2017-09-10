@@ -59,8 +59,9 @@ const resizeAndWritePhoto = async (req, res, next) => {
     if(!req.file) 
         return next();
     
+    const generatedUuid = uuid.v4();
     const extension = req.file.mimetype.split('/')[1];
-    const name = `${uuid.v4()}.${extension}`;
+    const name = `${generatedUuid}.${extension}`;
 
     let photo;
     if(extension == 'gif') {
@@ -71,6 +72,7 @@ const resizeAndWritePhoto = async (req, res, next) => {
         await photo.resize(parseInt(process.env.RESIZE_AVATAR_SIZE), jimp.AUTO);
     }
 
+    req.uuid = generatedUuid;
     req.body.url = await write(photo, name);
 
     next();

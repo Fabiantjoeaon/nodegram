@@ -31,6 +31,27 @@ a {
     }
 }
 
+.likes {
+    width: 80%;
+    margin: 0 auto;
+
+    .like {
+        margin: 10px auto;
+        padding: 5px 0px;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+        .liked-by {
+            padding: 10px;
+        }
+        a {
+            
+            
+            
+        }
+    }
+}
+
 
 .avatar {
     border-radius: 50%;
@@ -135,7 +156,7 @@ p {
         width: 100%;
         display: flex;
         flex-flow: row nowrap;
-        justify-content: space-between;
+        justify-content: flex-start;
         .photo-grid__photo {
             background-size: cover;
             background-position: center;

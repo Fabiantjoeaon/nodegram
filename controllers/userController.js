@@ -70,7 +70,7 @@ const edit = async (req, res) => {
     }
 
     req.flash('success', 'Succesfully updated your profile');
-    return res.redirect(`/users/${req.params.username}`);
+    return res.redirect(`/users/${req.body.username}`);
 }
 
 /**

@@ -52,14 +52,6 @@ module.exports = (app, passport) => {
         filterPhoto, catchErrors(resizeAndWritePhoto), 
         photoController.create);
 
-    app.use('/photos/:uuid', (req, res, next) => {
-        if(!req.params.uuid) {
-            req.flash('error', 'No photo found.');
-            return res.redirect('404');
-        }
-
-        return next();
-    });
     app.get('/photos/:uuid', ensureLoggedIn, 
         photoController.show);
     app.post('/photos/:uuid/like', ensureLoggedIn, 
