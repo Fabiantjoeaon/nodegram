@@ -36,6 +36,11 @@ const Photo = new Schema({
             ref: 'User'
         }
     }]
+}, {
+    timestamps: {
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt'
+    }
 });
 
 

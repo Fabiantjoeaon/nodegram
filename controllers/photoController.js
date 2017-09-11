@@ -133,7 +133,7 @@ const destroy = async (req, res) => {
     }
     
     const user = await User.findOne({username: req.user.username});
-    user.userPhotos.pull({uuid: req.params.uuid});
+    user.userPhotos.pull({_id: photo._id});
     await user.save();
 
     req.flash('success', 'Your photo has been removed!');

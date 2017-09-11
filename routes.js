@@ -34,6 +34,7 @@ module.exports = (app, passport) => {
     /**
      * USER
      */
+    app.get('/timeline', ensureLoggedIn, userController.renderTimeline);
     app.get('/users/:username', ensureLoggedIn, userController.show);
     app.get('/users/:username/edit', ensureLoggedIn, userController.showEdit);
     app.post('/users/:username/edit', ensureLoggedIn, 

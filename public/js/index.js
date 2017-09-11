@@ -39,4 +39,21 @@ window.onload = function() {
     };
 
     appendFirstLetterToAvatarPlaceholder();
+
+
+    const adjustPhotoGridHeight = () => {
+        const photos = $$('.photo-grid__photo');
+        if(photos) {
+            photos.forEach(photo => {
+                const width = photo.clientWidth;
+                photo.style.height = `${width}px`;
+            });
+        }
+    }
+
+    adjustPhotoGridHeight();
+
+    window.on('resize', () => {
+        adjustPhotoGridHeight();
+    })
 }

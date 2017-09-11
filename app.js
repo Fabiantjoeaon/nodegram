@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const MongoStore = require('connect-mongo')(session);
 const path = require('path');
+const format = require('date-fns/format');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const flash = require('connect-flash');
@@ -50,6 +51,7 @@ app.use(flash());
 app.use((req, res, next) => {
     res.locals.flashes = req.flash();
     res.locals.user = req.user || null;
+    res.locals.formatDate = (data) => data ? format(data, process.env.DATE_FORMAT) : null;
     if(req.body.submit)
         delete req.body.submit
     next();

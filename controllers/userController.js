@@ -1,5 +1,8 @@
 const User = require('../models/User');
+const Photo = require('../models/Photo');
 const getUpdatedFields = require('../helpers/getUpdatedFields');
+const flattenDeep = require('lodash/flattenDeep');
+const orderBy = require('lodash/orderBy');
 
 /**
  * 
@@ -185,6 +188,34 @@ const showFollowing = async (req, res) => {
     });
 }
 
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ */
+const renderTimeline = async (req, res) => {
+    const user = await User.findOne({'username': req.user.username})
+    
+    const photos = flattenDeep(await Promise.all(
+        Array.from(
+            user.following, 
+            async id => await Photo.find({author: id})
+                                .populate({
+                                    path: 'author', 
+                                    select: 'username avatar'
+                                })
+                                .sort({
+                                    'createdAt': 'desc'
+                                })
+        )
+    ));
+
+    return res.render('user/timeline', {
+        title: 'Your timeline',
+        photos: orderBy(photos, photo => photo.createdAt, ['desc'])
+    });
+}
+
 module.exports = {
     show,
     showEdit,
@@ -192,5 +223,6 @@ module.exports = {
     follow,
     unfollow,
     showFollowers,
-    showFollowing
+    showFollowing,
+    renderTimeline
 }
