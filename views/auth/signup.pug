@@ -5,7 +5,7 @@ block content
     h1.text-center Sign up
     .row.justify-content-center 
     
-        form(action='/auth/signup' method='POST')
+        form(action='/auth/signup?_csrf=${csrfToken}' method='POST')
             .form-group
                 label(for='username') Username
                 input.form-control(type='text' name='username')

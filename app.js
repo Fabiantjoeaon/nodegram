@@ -15,7 +15,8 @@ const flash = require('connect-flash');
 const helmet = require('helmet');
 const expressSanitizer = require('express-sanitizer');
 const router = require('./routes.js');
-
+const csrf = require('csurf');
+const {csrfErrors} = require('./middleware/errorMiddleware');
 const app = express();
 
 app.set('views', path.join(__dirname, 'views'));
@@ -47,6 +48,13 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: false}));
 app.use(expressSanitizer({}));
 
 app.use(flash());
+
+app.use(csrf({cookie: false}));
+app.use((req, res, next) => {
+  res.locals.csrfToken = req.csrfToken();
+  next();
+});
+app.use(csrfErrors);
 
 app.use((req, res, next) => {
     res.locals.flashes = req.flash();
