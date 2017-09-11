@@ -31,16 +31,19 @@ a {
     }
 }
 
-.likes {
-    width: 80%;
-    margin: 0 auto;
-
-    .like {
-        margin: 10px auto;
-        padding: 5px 0px;
+.list {
+    padding-left: 0px;
+    width: 50%;
+    margin: 40px auto 0px auto;
+    border: 1px solid #D5D5D5;
+    border-radius: 15px;
+    .list-item {
+        border-bottom: 1px solid #d5d5d5;
+        width: 100%;
+        padding: 10px 20px;
         display: flex;
         flex-flow: row nowrap;
-        justify-content: center;
+        justify-content: flex-start;
         .liked-by {
             padding: 10px;
         }

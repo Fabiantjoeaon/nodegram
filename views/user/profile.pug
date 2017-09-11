@@ -19,10 +19,16 @@ block content
         data-name=resourceUser.username)
     h1.text-center!= `${resourceUser.username}`
     .profile__followers 
-        a(href=`/users/${resourceUser}/followers`)
-            strong!= `${resourceUser.followers.length} followers`
-        a(href=`/users/${resourceUser}/following`)
-            strong!= `${resourceUser.following.length} following`
+        if(resourceUser.followers.length >= 1)
+            a(href=`/users/${resourceUser.username}/followers`)
+                strong!= `${resourceUser.followers.length} followers`
+        else 
+            strong 0 followers
+        if(resourceUser.following.length >= 1)
+            a(href=`/users/${resourceUser.username}/following`)
+                strong!= `${resourceUser.following.length} following`   
+        else 
+            strong 0 following
     if(user.username == resourceUser.username)
         a.text-center.edit-user(href=`/users/${user.username}/edit`)
             i.fa.fa-pencil

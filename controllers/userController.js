@@ -148,7 +148,19 @@ const unfollow = async (req, res) => {
 * @returns {}
 */
 const showFollowers = async (req, res) => {
+    const resourceUser = 
+        await User.findOne({'username': req.params.username})
+        .populate('followers');
 
+    if(!resourceUser) {
+        req.flash('error', 'No user found.');
+        return res.redirect('/404');
+    }
+
+    return res.render('user/followers', {
+        title: `${resourceUser.username} followers`,
+        resourceUser
+    });
 }
 
 /**
@@ -158,7 +170,19 @@ const showFollowers = async (req, res) => {
 * @returns {}
 */
 const showFollowing = async (req, res) => {
+    const resourceUser = 
+        await User.findOne({'username': req.params.username})
+        .populate('following');
 
+    if(!resourceUser) {
+        req.flash('error', 'No user found.');
+        return res.redirect('/404');
+    }
+
+    return res.render('user/following', {
+        title: `${resourceUser.username} following`,
+        resourceUser
+    });
 }
 
 module.exports = {

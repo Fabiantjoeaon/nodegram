@@ -2,11 +2,11 @@ extends ../master
 
 block content
     h2 
-        a(href=`/photos/${photo.uuid}`) Back to photo
-    h1.text-center Liked by
+        a(href=`/users/${resourceUser.username}`) Back to user
+    h1.text-center Following
     ul.list
-        each like in photo.likes 
-            - const username = like.likedBy.username;
+        each following in resourceUser.following
+            - const username = following.username;
             li.list-item
                 .small__avatar.avatar(
                     style= avatar ? `background-image:url('/uploads/${avatar}')` : null 
@@ -14,5 +14,5 @@ block content
                     data-name=username)
                 a(href=`/users/${username}`)
                     span.liked-by!= username
-                    i.fa.fa-heart
+                    
 
