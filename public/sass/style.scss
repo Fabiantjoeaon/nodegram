@@ -152,6 +152,8 @@ p {
     }
 }
 
+
+
 .photo-grid__container {
     width: 90%;
     margin: 50px auto 0px auto;
@@ -274,7 +276,6 @@ p {
     }
 
     .photo-single__comments {
-        padding-top: 20px;
         width: 95%;
         margin: 0 auto 50px auto;
 
@@ -307,6 +308,10 @@ p {
 
 .liked {
     color: $orangeRed;
+}
+
+.photo-timeline {
+    margin-bottom: 50px;
 }
 
 .flash__wrapper {

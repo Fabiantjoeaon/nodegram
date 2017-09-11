@@ -1,9 +1,63 @@
 extends ../master
 
 block content
-    each photo in photos 
-        - console.log(photo.createdAt)
-        h1!= photo.author.username
-        span!= formatDate(photo.createdAt)
+    h1.text-center Your timeline
+    .timeline
+        each photo in photos 
+            - const isThisUser = user.username == photo.author.username;
+            - const alreadyLiked = photo.likes.some(like => String(like.likedBy) === String(user._id));
+            .photo-single.photo-timeline
+                .photo-single__top 
+                    strong!= `Photo by <a href='/users/${photo.author.username}'>${photo.author.username}</a>`
+                    if(isThisUser || user.isAdmin)
+                        a(href=`/photos/${photo.uuid}/delete`)
+                            i.fa.fa-trash
+                            span.fa-padding-left-from-icon Delete
+                .photo-single__photo(
+                    style=`background-image:url('/uploads/${photo.url}');`
+                )
+                .photo-single__bottom
+                    .photo-single__description
+                        p!= photo.description.length > 1 ? photo.description : 'No description'
+                    .photo-single__likes
+                        if(photo.likes.length > 0)
+                            a.photo-single__show-likes(
+                                href=`/photos/${photo.uuid}/likes`
+                            ) See who liked this photo
+                        if(!isThisUser && !alreadyLiked)
+                            form(action=`/photos/${photo.uuid}/like` method='POST').photo-single__like-form
+                                button(type='submit' name='submit' )
+                                    i.fa.fa-heart
+                                    span.fa-padding-left-from-icon #{photo.likes.length}
+                                
+                        else 
+                            i.fa.fa-heart(class=alreadyLiked ? 'liked' : '')
+                            span.fa-padding-left-from-icon #{photo.likes.length}
+
+                .photo-single__comments
+                    each comment in photo.comments 
+                        - const {username, avatar} = comment.postedBy;
+                        - const isCommentUser = username == user.username;
+                        .photo-single__comment
+                            .small__avatar.avatar(
+                                style= avatar ? `background-image:url('/uploads/${avatar}')` : null 
+                                class= !avatar ? 'avatar--placeholder' : null
+                                data-name=username)
+                            .photo-single__comment-text-wrapper
+                                a(href=`/users/${username}`)
+                                    strong #{username}
+                                p #{comment.text}
+                            .photo-single__comment-actions
+                                if(isThisUser || isCommentUser || user.isAdmin)
+                                    a(href=`/photos/${photo.uuid}/delete-comment/${comment.id}`)
+                                        i.fa.fa-trash
+                    
+                    form(action=`/photos/${photo.uuid}/comment`, method='POST').photo-single__comment-form
+                        .form-group
+                            input.form-control(type='text' name='text' placeholder='Say something nice...')
+                        .form-group 
+                            button.button.btn(type='submit' name='submit')
+                                span Comment
+
 
     

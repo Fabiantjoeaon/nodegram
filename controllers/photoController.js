@@ -67,7 +67,7 @@ const like = async (req, res) => {
     await photo.save();
 
     req.flash('success', 'Like!');
-    return res.redirect(`/photos/${req.params.uuid}`);
+    return res.redirect(`back`);
 }
 
 /**
@@ -98,7 +98,7 @@ const comment = async (req, res) => {
     await photo.save();
 
     req.flash('success', 'Your comment has been posted!');
-    return res.redirect(`/photos/${req.params.uuid}`);
+    return res.redirect(`back`);
 }
 
 const destroyComment = async (req, res) => {
