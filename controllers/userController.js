@@ -199,13 +199,10 @@ const renderTimeline = async (req, res) => {
     const photos = flattenDeep(await Promise.all(
         Array.from(
             user.following, 
-            async id => await Photo.find({author: id})
+            async author => await Photo.find({author})
                                 .populate({
                                     path: 'author', 
                                     select: 'username avatar'
-                                })
-                                .sort({
-                                    'createdAt': 'desc'
                                 })
         )
     ));
