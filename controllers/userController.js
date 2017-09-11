@@ -11,7 +11,11 @@ const orderBy = require('lodash/orderBy');
  */
 const show = async (req, res) => {
     const resourceUser = 
-        await User.findOne({'username': req.params.username}).populate('userPhotos');
+        await User.findOne({
+            username: {
+                $in: [req.params.username]
+            }
+        }).populate('userPhotos');
     
     if(!resourceUser) {
         req.flash('error', 'No user found.');
@@ -31,7 +35,10 @@ const show = async (req, res) => {
  */
 const showEdit = async (req, res) => {
     const resourceUser = 
-        await User.findOne({'username': req.params.username});
+        await User.findOne({username: {
+                $in: [req.params.username]
+            }
+        });
     
     if(!resourceUser) {
         req.flash('error', 'No user found.');
@@ -50,6 +57,8 @@ const showEdit = async (req, res) => {
  * @param {*} res 
  */
 const edit = async (req, res) => {
+    req.body.username = req.sanitize(req.body.username);
+    req.body.bio = req.sanitize(req.body.bio);
     //TODO: No find one and update as u need resource here?
     // if (req.body.delete_avatar) {
     //     req.body.avatar = "";
@@ -60,7 +69,9 @@ const edit = async (req, res) => {
     // }
 
     const user = await User.findOneAndUpdate({
-        'username': req.params.username
+        username: {
+            $in: [req.params.username]
+        }
     }, {
         username: req.body.username,
         avatar: req.body.avatar,
@@ -84,10 +95,14 @@ const edit = async (req, res) => {
 */
 const follow = async (req, res) => {
     const userToFollow = await User.findOne({
-        username: req.params.username
+        username: {
+            $in: [req.params.username]
+        }
     });
     const userFollowing = await User.findOne({
-        username: req.user.username
+        username: {
+            $in: [req.user.username]
+        }
     });
 
     if(!userToFollow || !userFollowing) {
@@ -118,10 +133,14 @@ const follow = async (req, res) => {
 */
 const unfollow = async (req, res) => {
     const userToUnfollow = await User.findOne({
-        username: req.params.username
+        username: {
+            $in: [req.params.username]
+        }
     });
     const userUnfollowing = await User.findOne({
-        username: req.user.username
+        username: {
+            $in: [req.user.username]
+        }
     });
 
     if(!userToUnfollow || !userUnfollowing) {
@@ -152,7 +171,10 @@ const unfollow = async (req, res) => {
 */
 const showFollowers = async (req, res) => {
     const resourceUser = 
-        await User.findOne({'username': req.params.username})
+        await User.findOne({username: {
+                $in: [req.params.username]
+            }
+        })
         .populate('followers');
 
     if(!resourceUser) {
@@ -174,7 +196,10 @@ const showFollowers = async (req, res) => {
 */
 const showFollowing = async (req, res) => {
     const resourceUser = 
-        await User.findOne({'username': req.params.username})
+        await User.findOne({username: {
+                $in: [req.params.username]
+            }
+        })
         .populate('following');
 
     if(!resourceUser) {
@@ -194,16 +219,20 @@ const showFollowing = async (req, res) => {
  * @param {*} res 
  */
 const renderTimeline = async (req, res) => {
-    const user = await User.findOne({'username': req.user.username})
-    
+    const user = await User.findOne({username: {
+            $in: [req.user.username]
+        }
+    })
+
     const photos = flattenDeep(await Promise.all(
         Array.from(
             user.following, 
             async author => await Photo.find({author})
-                                .populate({
-                                    path: 'author', 
-                                    select: 'username avatar'
-                                })
+                                .populate([
+                                    'comments',
+                                    {path: 'author', select: 'username avatar'},
+                                    {path: 'comments.postedBy', select: 'username avatar'}
+                                ])
         )
     ));
 

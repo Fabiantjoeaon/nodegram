@@ -131,6 +131,13 @@ p {
     color: $orangeRed;
 }
 
+.photo-author {
+    display: flex;
+    flex-flow: row nowrap;
+    a {
+        margin-left: 20px;
+    }
+}
 .edit-user {
     display: block;
     top: 10px;
@@ -212,6 +219,8 @@ p {
 .photo-single {
     margin: 0 auto;
     width: 800px;
+    overflow: auto;
+    position: relative;
     height: 800px;
     .photo-single__photo {
         

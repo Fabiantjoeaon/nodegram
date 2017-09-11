@@ -5,7 +5,11 @@ const create = async (req, res) => {
     req.body.description = req.sanitize(req.body.description);
     const {description, url} = req.body;
 
-    const user = await User.findOne({username: req.user.username});
+    const user = await User.findOne({
+        username: {
+            $in: [req.user.username]
+        }
+    });
 
     const photo = new Photo({
         author: user._id,
@@ -30,7 +34,10 @@ const showCreate = (req, res) => {
 
 const show = async (req, res) => {
     const photo = await 
-        Photo.findOne({uuid: req.params.uuid})
+        Photo.findOne({uuid: {
+                $in: [req.params.uuid]
+            }
+        })
         .populate([
             'comments',
             {path: 'author', select: 'username'},
@@ -50,7 +57,11 @@ const show = async (req, res) => {
 
 const like = async (req, res) => {
     const photo = await 
-        Photo.findOne({uuid: req.params.uuid}).populate('author');
+        Photo.findOne({
+            uuid: {
+                $in: [req.params.uuid]
+            }
+            }).populate('author');
     
     if(!photo) {
         req.flash('error', 'No photo found.');
@@ -84,7 +95,11 @@ const comment = async (req, res) => {
     req.body.text = req.sanitize(req.body.text);
 
     const photo = await 
-        Photo.findOne({uuid: req.params.uuid});
+        Photo.findOne({
+            uuid: {
+                    $in: [req.params.uuid]
+                }
+            });
 
     if(!photo) {
         req.flash('error', 'No photo found.');
@@ -103,7 +118,10 @@ const comment = async (req, res) => {
 
 const destroyComment = async (req, res) => {
     const photo = await 
-        Photo.findOne({uuid: req.params.uuid});
+        Photo.findOne({uuid: {
+                $in: [req.params.uuid]
+            }
+        });
     
     if(!photo) {
         req.flash('error', 'No photo found.');
@@ -114,7 +132,7 @@ const destroyComment = async (req, res) => {
     await photo.save();
 
     req.flash('success', 'Your comment has been removed!');
-    return res.redirect(`/photos/${req.params.uuid}`);
+    return res.redirect(`back`);
 }
 
 /**
@@ -125,7 +143,11 @@ const destroyComment = async (req, res) => {
 */
 const destroy = async (req, res) => {
     const photo = await 
-        Photo.findOneAndRemove({uuid: req.params.uuid});
+        Photo.findOneAndRemove({
+            uuid: {
+                $in: [req.params.uuid]
+            }
+        });
     
     if(!photo) {
         req.flash('error', 'No photo found.');
@@ -158,7 +180,10 @@ const showComments = async (req, res) => {
 */
 const showLikes = async (req, res) => {
     const photo = await 
-        Photo.findOne({uuid: req.params.uuid})
+        Photo.findOne({uuid: {
+                $in: [req.params.uuid]
+            }
+        })
         .populate('likes.likedBy');
 
     if(!photo) {

@@ -8,7 +8,14 @@ block content
             - const alreadyLiked = photo.likes.some(like => String(like.likedBy) === String(user._id));
             .photo-single.photo-timeline
                 .photo-single__top 
-                    strong!= `Photo by <a href='/users/${photo.author.username}'>${photo.author.username}</a>`
+                    .photo-author
+                        .small__avatar.avatar(
+                            style= photo.author.avatar ? `background-image:url('/uploads/${photo.author.avatar}')` : null 
+                            class= !photo.author.avatar ? 'avatar--placeholder' : null
+                            data-name=photo.author.username)
+                        a(href=`/users/${photo.author.username}`)
+                            strong!= `${photo.author.username}</a>`
+                    
                     if(isThisUser || user.isAdmin)
                         a(href=`/photos/${photo.uuid}/delete`)
                             i.fa.fa-trash
