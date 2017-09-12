@@ -37,7 +37,7 @@ const csrfErrors = (err, req, res, next) => {
     if(err.code !== 'EBADCSRFTOKEN') return next(err);
 
     req.flash('error', 'Your form token has been expired. Please reload your form.')
-    res.redirect(req.originalUrl);
+    res.redirect('back');
 }
 
 
