@@ -26,15 +26,15 @@ const create = async (req, res) => {
     return res.redirect(`/photos/${photo.uuid}`);
 }
 
-const showCreate = (req, res) => {
-    return res.render('photo/create', {
-        title: 'New photo'
-    })
-}
+const showCreate = (req, res) => res.render('photo/create', {
+    title: 'New photo'
+})
+
 
 const show = async (req, res) => {
     const photo = await 
-        Photo.findOne({uuid: {
+        Photo.findOne({
+            uuid: {
                 $in: [req.params.uuid]
             }
         })
@@ -61,7 +61,7 @@ const like = async (req, res) => {
             uuid: {
                 $in: [req.params.uuid]
             }
-            }).populate('author');
+        }).populate('author');
     
     if(!photo) {
         req.flash('error', 'No photo found.');
@@ -69,16 +69,16 @@ const like = async (req, res) => {
     }
 
     if(photo.likes
-        .some(likedBy => String(likedBy._id) == String(req.user._id))) {
-            req.flash('error', 'You have already liked this photo!');
-            return res.redirect('back');
+        .some(likedBy => String(likedBy._id) === String(req.user._id))) {
+        req.flash('error', 'You have already liked this photo!');
+        return res.redirect('back');
     }
 
     photo.likes.push({likedBy: req.user._id});
     await photo.save();
 
     req.flash('success', 'Like!');
-    return res.redirect(`back`);
+    return res.redirect('back');
 }
 
 /**
@@ -97,9 +97,9 @@ const comment = async (req, res) => {
     const photo = await 
         Photo.findOne({
             uuid: {
-                    $in: [req.params.uuid]
-                }
-            });
+                $in: [req.params.uuid]
+            }
+        });
 
     if(!photo) {
         req.flash('error', 'No photo found.');
@@ -113,12 +113,13 @@ const comment = async (req, res) => {
     await photo.save();
 
     req.flash('success', 'Your comment has been posted!');
-    return res.redirect(`back`);
+    return res.redirect('back');
 }
 
 const destroyComment = async (req, res) => {
     const photo = await 
-        Photo.findOne({uuid: {
+        Photo.findOne({
+            uuid: {
                 $in: [req.params.uuid]
             }
         });
@@ -132,7 +133,7 @@ const destroyComment = async (req, res) => {
     await photo.save();
 
     req.flash('success', 'Your comment has been removed!');
-    return res.redirect(`back`);
+    return res.redirect('back');
 }
 
 /**
@@ -180,7 +181,8 @@ const showComments = async (req, res) => {
 */
 const showLikes = async (req, res) => {
     const photo = await 
-        Photo.findOne({uuid: {
+        Photo.findOne({
+            uuid: {
                 $in: [req.params.uuid]
             }
         })

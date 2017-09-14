@@ -24,7 +24,7 @@ const show = async (req, res) => {
     
     return res.render('user/profile', {
         title: `${resourceUser.username}`,
-        resourceUser: resourceUser
+        resourceUser
     });
 }
 
@@ -35,7 +35,8 @@ const show = async (req, res) => {
  */
 const showEdit = async (req, res) => {
     const resourceUser = 
-        await User.findOne({username: {
+        await User.findOne({
+            username: {
                 $in: [req.params.username]
             }
         });
@@ -46,8 +47,8 @@ const showEdit = async (req, res) => {
     }
 
     return res.render('user/edit', {
-        title: `edit`,
-        resourceUser: resourceUser
+        title: `edit ${resourceUser.username}`,
+        resourceUser
     });
 }
 
@@ -59,7 +60,7 @@ const showEdit = async (req, res) => {
 const edit = async (req, res) => {
     req.body.username = req.sanitize(req.body.username);
     req.body.bio = req.sanitize(req.body.bio);
-    //TODO: No find one and update as u need resource here?
+    //  TODO: No find one and update as u need resource here?
     // if (req.body.delete_avatar) {
     //     req.body.avatar = "";
     //     await fs.unlink(path.join(__dirname, `../public/uploads/${stakeholder.avatar}`), () => {});
@@ -111,9 +112,9 @@ const follow = async (req, res) => {
     }
     
     if(userToFollow.followers
-        .some(userId => String(userId) == String(userFollowing._id))) {
-            req.flash('error', `You are already following ${req.params.username}!`)
-            return res.redirect(`/users/${req.params.username}`);
+        .some(userId => String(userId) === String(userFollowing._id))) {
+        req.flash('error', `You are already following ${req.params.username}!`)
+        return res.redirect(`/users/${req.params.username}`);
     }
 
     userToFollow.followers.push({_id: userFollowing._id});
@@ -149,9 +150,9 @@ const unfollow = async (req, res) => {
     }
     
     if(!userToUnfollow.followers
-        .some(userId => String(userId) == String(userUnfollowing._id))) {
-            req.flash('error', `You are not following ${req.params.username}!`)
-            return res.redirect(`/users/${req.params.username}`);
+        .some(userId => String(userId) === String(userUnfollowing._id))) {
+        req.flash('error', `You are not following ${req.params.username}!`)
+        return res.redirect(`/users/${req.params.username}`);
     }
 
     userToUnfollow.followers.pull({_id: userUnfollowing._id});
@@ -171,7 +172,8 @@ const unfollow = async (req, res) => {
 */
 const showFollowers = async (req, res) => {
     const resourceUser = 
-        await User.findOne({username: {
+        await User.findOne({
+            username: {
                 $in: [req.params.username]
             }
         })
@@ -196,7 +198,8 @@ const showFollowers = async (req, res) => {
 */
 const showFollowing = async (req, res) => {
     const resourceUser = 
-        await User.findOne({username: {
+        await User.findOne({
+            username: {
                 $in: [req.params.username]
             }
         })
@@ -219,22 +222,21 @@ const showFollowing = async (req, res) => {
  * @param {*} res 
  */
 const renderTimeline = async (req, res) => {
-    const user = await User.findOne({username: {
+    const user = await User.findOne({
+        username: {
             $in: [req.user.username]
         }
-    })
+    });
 
-    const photos = flattenDeep(await Promise.all(
-        Array.from(
-            user.following, 
-            async author => await Photo.find({author})
-                                .populate([
-                                    'comments',
-                                    {path: 'author', select: 'username avatar'},
-                                    {path: 'comments.postedBy', select: 'username avatar'}
-                                ])
-        )
-    ));
+    const photos = flattenDeep(await Promise.all(Array.from(
+        user.following, 
+        async author => Photo.find({author})
+                            .populate([
+                                'comments',
+                                {path: 'author', select: 'username avatar'},
+                                {path: 'comments.postedBy', select: 'username avatar'}
+                            ])
+    )));
 
     return res.render('user/timeline', {
         title: 'Your timeline',

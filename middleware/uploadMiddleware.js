@@ -63,19 +63,20 @@ const resizeAndWritePhoto = async (req, res, next) => {
     const extension = req.file.mimetype.split('/')[1];
     const name = `${generatedUuid}.${extension}`;
 
-    let photo;
-    if(extension == 'gif') {
+    if(extension === 'gif') {
         req.flash('error', 'That filetype is not supported!');
         return res.redirect('back');
-    } else {
-        photo = await jimp.read(req.file.buffer);
-        await photo.resize(parseInt(process.env.RESIZE_AVATAR_SIZE), jimp.AUTO);
     }
 
+    const photo = await jimp.read(req.file.buffer);
+    await photo.resize(
+        parseInt(process.env.RESIZE_AVATAR_SIZE, 10), jimp.AUTO
+    );
+    
     req.uuid = generatedUuid;
     req.body.url = await write(photo, name);
 
-    next();
+    return next();
 }
 
 /**
@@ -91,18 +92,19 @@ const resizeAndWriteAvatar = async (req, res, next) => {
     const extension = req.file.mimetype.split('/')[1];
     const name = `${uuid.v4()}.${extension}`;
 
-    let photo;
-    if(extension == 'gif') {
+    if(extension === 'gif') {
         req.flash('error', 'That filetype is not supported!');
         return res.redirect('back');
-    } else {
-        photo = await jimp.read(req.file.buffer);
-        await photo.resize(parseInt(process.env.RESIZE_AVATAR_SIZE), jimp.AUTO);
-    }
+    } 
 
+    const photo = await jimp.read(req.file.buffer);
+    await photo.resize(
+        parseInt(process.env.RESIZE_AVATAR_SIZE, 10), jimp.AUTO
+    );
+    
     req.body.avatar = await write(photo, name);
 
-    next();
+    return next();
 }
 
 

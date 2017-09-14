@@ -16,7 +16,7 @@ const devErrors = (err, req, res, next) => {
     res.format({
         // Based on the `Accept` http header
         'text/html': () => {
-        res.render('error', errorDetails);
+            res.render('error', errorDetails);
         }, 
         'application/json': () => res.json(errorDetails) 
     });
@@ -37,7 +37,7 @@ const csrfErrors = (err, req, res, next) => {
     if(err.code !== 'EBADCSRFTOKEN') return next(err);
 
     req.flash('error', 'Your form token has been expired. Please reload your form.')
-    res.redirect('back');
+    return res.redirect('back');
 }
 
 

@@ -1,5 +1,5 @@
 const ensureLoggedIn = async (req, res, next) => {
-    if (req.isAuthenticated())
+    if(req.isAuthenticated())
         return next();
 
     req.flash('error', 'Please log in to access this page!');
@@ -7,7 +7,7 @@ const ensureLoggedIn = async (req, res, next) => {
 }
 
 const ensureLoggedOut = async (req, res, next) => {
-    if (!req.isAuthenticated())
+    if(!req.isAuthenticated())
         return next();
 
     req.flash('error', 'You are already logged in!');

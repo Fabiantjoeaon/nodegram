@@ -1,10 +1,7 @@
-'use strict';
-
-const mongodbErrorHandler = require('mongoose-mongodb-errors');
 const mongoose = require('mongoose');
 const validate = require('validate.js');
 
-const Schema = mongoose.Schema;
+const {Schema} = mongoose;
 mongoose.Promise = global.Promise;
 
 const Photo = new Schema({

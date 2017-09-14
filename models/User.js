@@ -1,11 +1,9 @@
-'use strict';
-
 const {encrypt, isHashMatching} = require('../helpers/hashing');
 const mongodbErrorHandler = require('mongoose-mongodb-errors');
 const mongoose = require('mongoose');
 const validate = require('validate.js');
 
-const Schema = mongoose.Schema;
+const {Schema} = mongoose;
 mongoose.Promise = global.Promise;
 
 const User = new Schema({
@@ -42,13 +40,13 @@ const User = new Schema({
     }]
 });
 
-User.pre('save', async function(next) {
+User.pre('save', async function hashUser(next) {
     if (!this.isModified('password')) return next();
 
     const hash = await encrypt(this.password);    
     this.password = hash;
 
-    next();
+    return next();
 });
 
 User.statics.getInitialConstraints = () => ({
@@ -69,8 +67,8 @@ User.statics.getInitialConstraints = () => ({
     }
 });
 
-User.methods.comparePassword = async function(candidatePassword) {
-    return await isHashMatching(candidatePassword, this.password);
+User.methods.comparePassword = async function comparePassword(candidatePassword) {
+    return isHashMatching(candidatePassword, this.password);
 } 
 
 User.plugin(mongodbErrorHandler);
