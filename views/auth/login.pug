@@ -4,13 +4,15 @@ block content
     h1.text-center Login
     .row.justify-content-center 
         
-        form(action='/auth/login?_csrf=${csrfToken}' method='POST')
+        form(action='/auth/login' method='POST')
             .form-group
                 label(for='username') Username
                 input.form-control(type='text' name='username')
             .form-group
                 label(for='password') Password
                 input.form-control(type='password' name='password')
+            
+            input(type='hidden' name='_csrf' value=csrfToken)
             .form-group
                 input.button.button-info.form-control(type='submit' name='submit')
 

@@ -23,7 +23,8 @@ block content
                         href=`/photos/${photo.uuid}/likes`
                     ) See who liked this photo
                 if(!isThisUser && !alreadyLiked)
-                    form(action=`/photos/${photo.uuid}/like?_csrf=${csrfToken}` method='POST').photo-single__like-form
+                    form(action=`/photos/${photo.uuid}/like` method='POST').photo-single__like-form
+                        input(type='hidden' name='_csrf' value=csrfToken)
                         button(type='submit' name='submit' )
                             i.fa.fa-heart
                             span.fa-padding-left-from-icon #{photo.likes.length}
@@ -50,9 +51,10 @@ block content
                             a(href=`/photos/${photo.uuid}/delete-comment/${comment.id}`)
                                 i.fa.fa-trash
             
-            form(action=`/photos/${photo.uuid}/comment?_csrf=${csrfToken}`, method='POST').photo-single__comment-form
+            form(action=`/photos/${photo.uuid}/comment`, method='POST').photo-single__comment-form
                 .form-group
                     input.form-control(type='text' name='text' placeholder='Say something nice...')
+                input(type='hidden' name='_csrf' value=csrfToken)
                 .form-group 
                     button.button.btn(type='submit' name='submit')
                         span Comment

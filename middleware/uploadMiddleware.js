@@ -70,7 +70,8 @@ const resizeAndWritePhoto = async (req, res, next) => {
 
     const photo = await jimp.read(req.file.buffer);
     await photo.resize(
-        parseInt(process.env.RESIZE_AVATAR_SIZE, 10), jimp.AUTO
+        parseInt(process.env.RESIZE_AVATAR_SIZE, 10), 
+        jimp.AUTO
     );
     
     req.uuid = generatedUuid;
@@ -99,7 +100,8 @@ const resizeAndWriteAvatar = async (req, res, next) => {
 
     const photo = await jimp.read(req.file.buffer);
     await photo.resize(
-        parseInt(process.env.RESIZE_AVATAR_SIZE, 10), jimp.AUTO
+        parseInt(process.env.RESIZE_AVATAR_SIZE, 10), 
+        jimp.AUTO
     );
     
     req.body.avatar = await write(photo, name);

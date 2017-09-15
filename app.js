@@ -47,12 +47,12 @@ app.use(expressSanitizer({}));
 app.use(flash());
 
 // FIXME: Fix always giving warning
-// app.use(csrf({cookie: false}));
-// app.use((req, res, next) => {
-//   res.locals.csrfToken = req.csrfToken();
-//   next();
-// });
-// app.use(csrfErrors);
+app.use(csrf({cookie: false}));
+app.use((req, res, next) => {
+    res.locals.csrfToken = req.csrfToken();
+    return next();
+});
+app.use(csrfErrors);
 
 app.use((req, res, next) => {
     res.locals.flashes = req.flash();
