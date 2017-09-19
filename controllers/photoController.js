@@ -1,6 +1,14 @@
 const Photo = require('../models/Photo');
 const User = require('../models/User');
 
+const index = async (req, res) => {
+    const photos = Photo.find({});
+    return res.render('photo/index', {
+        title: 'All users',
+        photos
+    });
+}
+
 const create = async (req, res) => {
     req.body.description = req.sanitize(req.body.description);
     const {description, url} = req.body;
@@ -29,7 +37,6 @@ const create = async (req, res) => {
 const showCreate = (req, res) => res.render('photo/create', {
     title: 'New photo'
 })
-
 
 const show = async (req, res) => {
     const photo = await 
@@ -200,6 +207,7 @@ const showLikes = async (req, res) => {
 }
 
 module.exports = {
+    index,
     create, 
     show,
     showCreate,

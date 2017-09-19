@@ -3,8 +3,7 @@ import '../sass/style.scss';
 import {$, $$} from './bling';
 
 
-window.onload = function() {
-
+window.onload = function () {
     document.body.scrollTop = document.documentElement.scrollTop = 0;
 
     /**
@@ -53,6 +52,25 @@ window.onload = function() {
 
     adjustPhotoGridHeight();
 
+    const toggleNavPanel = () => {
+        const toggle = $('.navbar-user-toggle');
+        const navPanel = $('.navbar-user-panel');
+        // console.log(toggle)
+        let flag;
+        if(toggle) {
+            toggle.on('click', () => {
+                flag = !flag;
+
+                if(flag) 
+                    navPanel.classList.add('active');
+                else 
+                    navPanel.classList.remove('active');
+            });
+        }
+    }
+
+    toggleNavPanel();
+    
     window.on('resize', () => {
         adjustPhotoGridHeight();
     })

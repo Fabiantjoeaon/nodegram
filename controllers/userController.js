@@ -4,6 +4,14 @@ const getUpdatedFields = require('../helpers/getUpdatedFields');
 const flattenDeep = require('lodash/flattenDeep');
 const orderBy = require('lodash/orderBy');
 
+const index = async (req, res) => {
+    const users = await User.find({});
+    return res.render('user/index', {
+        title: 'All users',
+        users
+    });
+}
+
 /**
  * 
  * @param {*} req 
@@ -245,6 +253,7 @@ const renderTimeline = async (req, res) => {
 }
 
 module.exports = {
+    index,
     show,
     showEdit,
     edit,

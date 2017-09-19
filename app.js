@@ -30,8 +30,8 @@ app.use(helmet.noSniff());
 app.use(session({
     secret: process.env.SESSION_SECRET,
     key: process.env.SESSION_KEY,
-    resave: false,
-    saveUninitialized: false,
+    resave: true,
+    saveUninitialized: true,
     store: new MongoStore({
         mongooseConnection: mongoose.connection
     })

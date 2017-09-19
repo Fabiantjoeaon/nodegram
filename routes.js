@@ -10,6 +10,10 @@ const {
     resizeAndWritePhoto,
     resizeAndWriteAvatar
 } = require('./middleware/uploadMiddleware');
+const {
+    ensureThisUser,
+    ensureSystemAdmin
+} = require('./middleware/ensureMiddleware');
 
 module.exports = (app, passport) => {
     /**
@@ -31,13 +35,27 @@ module.exports = (app, passport) => {
      */
     app.get('/', webController.renderHome);
 
+    app.get(
+        '/photos', 
+        ensureLoggedIn, 
+        ensureSystemAdmin,
+        catchErrors(photoController.index)
+    );
+    app.get(
+        '/users', 
+        ensureLoggedIn, 
+        ensureSystemAdmin,
+        catchErrors(userController.index)
+    );
+
     /**
      * USER
      */
     app.get('/timeline', ensureLoggedIn, userController.renderTimeline);
     app.get('/users/:username', ensureLoggedIn, userController.show);
-    app.get('/users/:username/edit', ensureLoggedIn, userController.showEdit);
+    app.get('/users/:username/edit', ensureLoggedIn, ensureThisUser, userController.showEdit);
     app.post('/users/:username/edit', ensureLoggedIn, 
+        ensureThisUser,
         filterAvatar, catchErrors(resizeAndWriteAvatar), 
         userController.edit);
     app.get('/users/:username/follow', ensureLoggedIn, catchErrors(userController.follow));
@@ -53,8 +71,11 @@ module.exports = (app, passport) => {
         filterPhoto, catchErrors(resizeAndWritePhoto), 
         photoController.create);
 
-    app.get('/photos/:uuid', ensureLoggedIn, 
-        photoController.show);
+    app.get(
+        '/photos/:uuid', 
+        ensureLoggedIn, 
+        photoController.show
+    );
     app.post('/photos/:uuid/like', ensureLoggedIn, 
         catchErrors(photoController.like));
     app.post('/photos/:uuid/comment', ensureLoggedIn, 
@@ -73,5 +94,4 @@ module.exports = (app, passport) => {
     });
           
 }
-
 

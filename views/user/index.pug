@@ -1,0 +1,31 @@
+extends ../master
+
+block content
+    h2 All users
+
+    table
+        tr  
+            th #
+            th Avatar
+            th Username
+            th Followers 
+            th Following
+            th Actions
+        
+        each user, index in users 
+            tr 
+                td!= index 
+                td!= user.avatar 
+                td!= user.username 
+                td 
+                    if(user.followers) 
+                        p!= user.followers.length
+                td 
+                    if(user.following) 
+                        p!= user.following.length
+                td 
+                    a(href=`/users/${user.username}/edit`)
+                        i.fa.fa-pencil
+                    a(href=`/users/${user.username}/destroy`)
+                        i.fa.fa-trash
+                    

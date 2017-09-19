@@ -10,7 +10,6 @@ const renderLogin = (req, res) => res.render('auth/login', {
     title: 'Login'
 });
 
-
 const signup = async (req, res) => {
     req.body.username = req.sanitize(req.body.username);
     const {username, password} = req.body;

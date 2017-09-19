@@ -19,10 +19,31 @@ html
 
                 ul.navbar-right.navbar-nav
                     if(user)
-                        li.nav-item 
-                            a.nav-link(href=`/users/${user.username}`) #{user.username}
-                        li.nav-item 
-                            a.nav-link(href=`/auth/logout`) Logout
+                        .navbar-user-toggle
+                            .small__avatar.avatar(
+                                style= user.avatar ? `background-image:url('/uploads/${user.avatar}')` : null 
+                                class= !user.avatar ? 'avatar--placeholder' : null
+                                data-name=user.username)
+                            li.nav-item 
+                                span.nav-link(href=`/users/${user.username}`) #{user.username}
+                            
+                            ul.navbar-user-panel
+                                if(user.isAdmin)
+                                    li 
+                                        a.nav-link(href=`/users`) All users
+                                    li 
+                                        a.nav-link(href=`/photos`) All photos
+
+                                li 
+                                    a.nav-link(href=`/timeline`) Timeline
+                                li 
+                                    a.nav-link(href=`/users/${user.username}`) My profile
+                                li 
+                                    a.nav-link(href=`/logout`) Logout
+                                
+                                
+
+                        
 
                     else
                         li.nav-item 
