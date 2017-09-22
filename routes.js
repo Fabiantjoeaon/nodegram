@@ -85,7 +85,7 @@ module.exports = (app, passport) => {
         photoController.showLikes);
     app.get('/photos/:uuid/comments', ensureLoggedIn, 
         photoController.showComments);
-    app.get('/photos/:uuid/delete', ensureLoggedIn, 
+    app.get('/photos/:uuid/destroy', ensureLoggedIn, 
         catchErrors(photoController.destroy));
     app.get('/photos/:uuid/delete-comment/:comment_id', ensureLoggedIn, 
         catchErrors(photoController.destroyComment));

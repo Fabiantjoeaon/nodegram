@@ -11,7 +11,10 @@ const index = async (req, res) => {
             )]
         }
     })
-    .populate('author');
+    .populate([
+        'author',
+        {path: 'tag', select: 'name color'}
+    ]);
 
     return res.render('photo/index', {
         title: 'All users',
@@ -205,19 +208,14 @@ const destroy = async (req, res) => {
             uuid: {
                 $in: [req.params.uuid]
             }
-        });
+        }).populate('author');
     
-    if(!photo) {
-        req.flash('error', 'No photo found.');
-        return res.redirect('/404');
-    }
-    
-    const user = await User.findOne({username: req.user.username});
+    const user = await User.findOne({username: photo.author.username});
     user.userPhotos.pull({_id: photo._id});
     await user.save();
 
     req.flash('success', 'Your photo has been removed!');
-    return res.redirect(`/users/${req.user.username}`)
+    return res.redirect('back');
 }
 
 /**

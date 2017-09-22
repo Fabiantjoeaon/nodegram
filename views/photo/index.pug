@@ -16,6 +16,8 @@ block content
                 th Created at
                 th Comments 
                 th Likes
+                th Tag
+                th Actions
             
             each photo, index in photos
                 tr 
@@ -29,6 +31,12 @@ block content
                         if(photo.likes) 
                             p!= photo.likes.length
                     td 
+                        if(photo.tag && photo.tag.color)
+                            .photo-single__tag 
+                                span(style=`background-color: ${photo.tag.color};`)!= photo.tag.name
+                    td 
+                        a(href=`/photos/${photo.uuid}`)
+                            span &rarr;
                         a(href=`/photos/${photo.uuid}/destroy`)
                             i.fa.fa-trash
     else 

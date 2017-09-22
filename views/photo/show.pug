@@ -11,7 +11,7 @@ block content
                 .photo-single__tag 
                     span(style=`background-color: ${photo.tag.color};`)!= photo.tag.name
             if(isThisUser || user.isAdmin)
-                a(href=`/photos/${photo.uuid}/delete`)
+                a(href=`/photos/${photo.uuid}/destroy`)
                     i.fa.fa-trash
                     span.fa-padding-left-from-icon Delete
         .photo-single__photo(
