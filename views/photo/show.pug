@@ -7,6 +7,9 @@ block content
     .photo-single
         .photo-single__top 
             strong!= `Photo by <a href='/users/${photo.author.username}'>${photo.author.username}</a>`
+            if(photo.tag)
+                .photo-single__tag 
+                    span(style=`background-color: ${photo.tag.color};`)!= photo.tag.name
             if(isThisUser || user.isAdmin)
                 a(href=`/photos/${photo.uuid}/delete`)
                     i.fa.fa-trash

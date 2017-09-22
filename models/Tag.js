@@ -10,12 +10,7 @@ const Tag = new Schema({
         lowercase: true
     },
     color: {
-        name: {
-            type: String
-        },
-        value: {
-            type: String
-        }
+        type: String
     },
     photos: [{
         type: mongoose.Schema.Types.ObjectId,

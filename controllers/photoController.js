@@ -24,11 +24,8 @@ const create = async (req, res) => {
     req.body.description = req.sanitize(req.body.description);
     if(req.body.tagName)
         req.body.tagName = req.sanitize(req.body.tagName);
-    if(req.body.tagColor)
-        req.body.tagColor = req.sanitize(req.body.tagColor);
 
     const {tag, description, url} = req.body;
-
 
     const user = await User.findOne({
         username: {
@@ -38,6 +35,17 @@ const create = async (req, res) => {
 
     let tagInstance;
     if(tag === 'new-tag') {
+        const existingTag = await Tag.findOne({
+            name: {
+                $in: [req.body.tagName]
+            }
+        });
+
+        if(existingTag) {
+            req.flash('error', 'This tag already exists');
+            return res.redirect('back');
+        }
+
         tagInstance = new Tag({
             name: req.body.tagName,
             color: req.body.tagColor
@@ -89,7 +97,8 @@ const show = async (req, res) => {
         .populate([
             'comments',
             {path: 'author', select: 'username'},
-            {path: 'comments.postedBy', select: 'username avatar'}
+            {path: 'comments.postedBy', select: 'username avatar'},
+            {path: 'tag', select: 'name color'}
         ]);
 
     if(!photo) {
