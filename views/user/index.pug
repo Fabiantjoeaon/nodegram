@@ -3,29 +3,43 @@ extends ../master
 block content
     h2 All users
 
-    table
-        tr  
-            th #
-            th Avatar
-            th Username
-            th Followers 
-            th Following
-            th Actions
-        
-        each user, index in users 
-            tr 
-                td!= index 
-                td!= user.avatar 
-                td!= user.username 
-                td 
-                    if(user.followers) 
-                        p!= user.followers.length
-                td 
-                    if(user.following) 
-                        p!= user.following.length
-                td 
-                    a(href=`/users/${user.username}/edit`)
-                        i.fa.fa-pencil
-                    a(href=`/users/${user.username}/destroy`)
-                        i.fa.fa-trash
+    .search-container 
+        input.search-input(placeholder='search...' name='search' type='text' data-url=url)
+        a.search-submit
+            i.fa.fa-search.fa-padding-left
+
+    if(users && users.length > 0)
+        table
+            tr  
+                th #
+                th Avatar
+                th Username
+                th Followers 
+                th Following
+                th Is admin
+                th Actions
+            
+            
+            each userIt, index in users 
+                tr 
+                    td!= index 
+                    td!= userIt.avatar 
+                    td!= userIt.username 
+                    td 
+                        if(user.followers) 
+                            p!= userIt.followers.length
+                    td 
+                        if(user.following) 
+                            p!= userIt.following.length
+                    td 
+                        span!= userIt.isAdmin ? '&#10003;' : '&#x2715;'
+                        
+                    td 
+                        a(href=`/users/${userIt.username}/edit`)
+                            i.fa.fa-pencil
+                        a(href=`/users/${userIt.username}/destroy`)
+                            i.fa.fa-trash
+    else 
+        h1 No results for your query...
+
                     

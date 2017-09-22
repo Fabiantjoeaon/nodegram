@@ -3,3 +3,35 @@ extends ../master
 block content
     h2 All photos
 
+    .search-container 
+        input.search-input(placeholder='search...' name='search' type='text' data-url=url)
+        a.search-submit
+            i.fa.fa-search.fa-padding-left
+
+    if(photos && photos.length > 0)
+        table
+            tr  
+                th #
+                th Author
+                th Created at
+                th Comments 
+                th Likes
+            
+            each photo, index in photos
+                tr 
+                    td!= index 
+                    td!= photo.author.username 
+                    td!= formatDate(photo.createdAt)
+                    td 
+                        if(photo.comments) 
+                            p!= photo.comments.length
+                    td 
+                        if(photo.likes) 
+                            p!= photo.likes.length
+                    td 
+                        a(href=`/photos/${photo.uuid}/destroy`)
+                            i.fa.fa-trash
+    else 
+        h1 No results for your query...
+
+                    

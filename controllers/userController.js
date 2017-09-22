@@ -4,11 +4,25 @@ const getUpdatedFields = require('../helpers/getUpdatedFields');
 const flattenDeep = require('lodash/flattenDeep');
 const orderBy = require('lodash/orderBy');
 
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ */
 const index = async (req, res) => {
-    const users = await User.find({});
+    const users = await User.find({
+        username: {
+            $in: [new RegExp(
+                req.query.search,
+                'i'
+            )]
+        }
+    });
+
     return res.render('user/index', {
         title: 'All users',
-        users
+        users,
+        url: '?'
     });
 }
 
@@ -84,7 +98,8 @@ const edit = async (req, res) => {
     }, {
         username: req.body.username,
         avatar: req.body.avatar,
-        bio: req.body.bio
+        bio: req.body.bio,
+        isAdmin: req.body.isAdmin
     });
 
     if(!user) {
@@ -252,6 +267,23 @@ const renderTimeline = async (req, res) => {
     });
 }
 
+/**
+*
+* @param {Object} req 
+* @param {Object} res 
+* @returns {}
+*/
+const destroy = async (req, res) => {
+    await User.findOneAndRemove({
+        username: {
+            $in: [req.params.username]
+        }
+    });
+
+    req.flash('success', `Succesfully destroyed ${req.params.username}`);
+    return res.redirect('back');
+}
+
 module.exports = {
     index,
     show,
@@ -261,5 +293,6 @@ module.exports = {
     unfollow,
     showFollowers,
     showFollowing,
-    renderTimeline
+    renderTimeline,
+    destroy
 }

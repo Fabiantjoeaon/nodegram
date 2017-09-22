@@ -2,10 +2,20 @@ const Photo = require('../models/Photo');
 const User = require('../models/User');
 
 const index = async (req, res) => {
-    const photos = Photo.find({});
+    const photos = await Photo.find({
+        description: {
+            $in: [new RegExp(
+                req.query.search,
+                'i'
+            )]
+        }
+    })
+    .populate('author');
+
     return res.render('photo/index', {
         title: 'All users',
-        photos
+        photos,
+        url: '?'
     });
 }
 

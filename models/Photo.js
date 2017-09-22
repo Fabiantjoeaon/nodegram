@@ -32,7 +32,11 @@ const Photo = new Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User'
         }
-    }]
+    }],
+    tag: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Tag'
+    }
 }, {
     timestamps: {
         createdAt: 'createdAt',

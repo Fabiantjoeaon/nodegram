@@ -70,6 +70,49 @@ window.onload = function () {
     }
 
     toggleNavPanel();
+
+    const handleTableSearch = () => {
+        const search = $('.search-input');
+        
+        if(search) {
+            const submit = $('.search-submit');
+
+            if(window.localStorage && localStorage.getItem('search-input')) {
+                search.value = localStorage.getItem('search-input');
+            }
+
+            search.on('keyup', (e) => {
+                if(e.keyCode == 13 || e.key == 'Enter') {
+                    submit.click();
+                } 
+            })
+            
+            submit.on('click', (e) => {
+                
+                const url = search.getAttribute('data-url');
+                $('.search-submit').setAttribute('href', `${url}search=${search.value}`)
+                if(window.localStorage)
+                    localStorage.setItem('search-input', search.value);
+            })
+        }   
+    }
+
+    handleTableSearch();
+
+    
+    const ioCheckboxHandler = () => {
+        const checkboxes = $$('.io-checkbox');
+
+        if(checkboxes) {
+            checkboxes.forEach(checkbox => {
+                checkbox.on('change', () => {
+                    checkbox.value = +checkbox.checked;
+                })
+            });
+        }
+    }
+
+    ioCheckboxHandler();
     
     window.on('resize', () => {
         adjustPhotoGridHeight();

@@ -62,6 +62,7 @@ module.exports = (app, passport) => {
     app.get('/users/:username/unfollow', ensureLoggedIn, catchErrors(userController.unfollow));
     app.get('/users/:username/followers', ensureLoggedIn, catchErrors(userController.showFollowers));
     app.get('/users/:username/following', ensureLoggedIn, catchErrors(userController.showFollowing));
+    app.get('/users/:username/destroy', ensureLoggedIn, ensureThisUser, catchErrors(userController.destroy));
 
     /**
      * PHOTO

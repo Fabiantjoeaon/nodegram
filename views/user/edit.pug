@@ -29,6 +29,12 @@ block content
             .form-group
                 label(for="avatar") Avatar
                 input.form-control(type="file" name="avatar" accept="image/png, image/jpeg")
+
+            if(user.isAdmin)
+                label(for="isAdmin") Is admin
+                input.io-checkbox(
+                    type="checkbox" name="isAdmin" value=resourceUser.isAdmin checked=(resourceUser.isAdmin ? true : undefined)
+                )
             
             .form-group
                 input.button.button-info.form-control(type='submit' name='submit')
