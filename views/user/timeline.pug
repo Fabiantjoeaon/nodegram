@@ -16,6 +16,10 @@ block content
                         a(href=`/users/${photo.author.username}`)
                             strong!= `${photo.author.username}</a>`
                     
+                    if(photo.tag)
+                        .photo-single__tag 
+                            span(style=`background-color: ${photo.tag.color};`)!= photo.tag.name
+
                     if(isThisUser || user.isAdmin)
                         a(href=`/photos/${photo.uuid}/delete`)
                             i.fa.fa-trash

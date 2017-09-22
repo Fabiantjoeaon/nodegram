@@ -257,7 +257,8 @@ const renderTimeline = async (req, res) => {
                             .populate([
                                 'comments',
                                 {path: 'author', select: 'username avatar'},
-                                {path: 'comments.postedBy', select: 'username avatar'}
+                                {path: 'comments.postedBy', select: 'username avatar'},
+                                {path: 'tag', select: 'name color'}
                             ])
     )));
 
