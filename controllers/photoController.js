@@ -1,5 +1,6 @@
 const Photo = require('../models/Photo');
 const User = require('../models/User');
+const Tag = require('../models/Tag');
 
 const index = async (req, res) => {
     const photos = await Photo.find({
@@ -21,7 +22,13 @@ const index = async (req, res) => {
 
 const create = async (req, res) => {
     req.body.description = req.sanitize(req.body.description);
-    const {description, url} = req.body;
+    if(req.body.tagName)
+        req.body.tagName = req.sanitize(req.body.tagName);
+    if(req.body.tagColor)
+        req.body.tagColor = req.sanitize(req.body.tagColor);
+
+    const {tag, description, url} = req.body;
+
 
     const user = await User.findOne({
         username: {
@@ -29,24 +36,48 @@ const create = async (req, res) => {
         }
     });
 
+    let tagInstance;
+    if(tag === 'new-tag') {
+        tagInstance = new Tag({
+            name: req.body.tagName,
+            color: req.body.tagColor
+        });
+    } else {
+        tagInstance = await Tag.findOne({
+            name: {
+                $in: [tag]
+            }
+        });
+    }
+
     const photo = new Photo({
         author: user._id,
         description,
         url,
-        uuid: req.uuid
+        uuid: req.uuid,
+        tag: tagInstance._id
     });
 
     await photo.save();
     user.userPhotos.push(photo);
     await user.save();
 
+    tagInstance.photos.push(photo);
+    await tagInstance.save();
+
     req.flash('success', 'Succesfully uploaded photo!');
     return res.redirect(`/photos/${photo.uuid}`);
 }
 
-const showCreate = (req, res) => res.render('photo/create', {
-    title: 'New photo'
-})
+const showCreate = async (req, res) => {
+    const tags = await Tag.find({});
+
+    return res.render('photo/create', {
+        tags,
+        tagColors: Tag.getPossibleColors(),
+        title: 'New photo'  
+    })
+}
 
 const show = async (req, res) => {
     const photo = await 

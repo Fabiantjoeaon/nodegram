@@ -113,7 +113,25 @@ window.onload = function () {
     }
 
     ioCheckboxHandler();
+
+    const handleTagForm = () => {
+        const tagSelect = $('.tag-select');
+        tagSelect.on('input', (e) => {
+            const val = e.target.value
+            if(val === 'new-tag') {
+                // $('.tag-select__wrapper').style.display = 'none';
+                $('.tag-color').style.display = 'block';
+                $('.tag-name').style.display = 'block';
+            } else {
+                $('.tag-color').style.display = 'none';
+                $('.tag-name').style.display = 'none';
+            }
+            
+        });
+    }
     
+    handleTagForm();
+
     window.on('resize', () => {
         adjustPhotoGridHeight();
     })

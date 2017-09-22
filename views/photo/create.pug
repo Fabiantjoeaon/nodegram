@@ -2,21 +2,41 @@ extends ../master
 
 block content
     h1.text-center New photo
-    
     .col-xs-4
     .col-xs-4
         form(action=`/photos/new?_csrf=${csrfToken}` id='newPhotoForm' method='POST' enctype='multipart/form-data')
             .form-group
-                label(for="photo") Photo
-                input.form-control(type="file" name="photo" accept="image/png, image/jpeg")
+                label(for='photo') Photo
+                input.form-control(type='file' name='photo' accept='image/png, image/jpeg')
 
             .form-group
                 label(for='description') Description
                 textarea.form-control(form="newPhotoForm" rows="5" name="description") 
+            
+            if(tags.length > 0)
+                .form-group.tag-select__wrapper
+                    label(for='tag') Tag 
+                    select.form-control(name='tag').tag-select
+                        option(value=null disabled) Select a tag
+                        each tag, index in tags
+                            option(
+                                value=tag.name 
+                            )!=`${tag.name}`
+                        option(value='new-tag') Create a new tag
 
-            .form-group 
-                label(for='tags') Tags
-                
+            .form-group.tag-name
+                label(for='tag-name') Tag name
+                input(type='text' name='tagName')
+
+            .form-group.tag-color
+                label(for='tag-color') Tag color
+                select.form-control(name='tagColor')
+                    option(value=null disabled) Select a color
+                    each color, index in tagColors
+                        option(
+                            value=color 
+                            style=`background:${color}`
+                        )!=`${color}`
             
             .form-group
                 input.button.button-info.form-control(type='submit' name='submit')
