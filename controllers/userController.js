@@ -253,13 +253,14 @@ const renderTimeline = async (req, res) => {
 
     const photos = flattenDeep(await Promise.all(Array.from(
         user.following, 
-        async author => Photo.find({author})
-                            .populate([
-                                'comments',
-                                {path: 'author', select: 'username avatar'},
-                                {path: 'comments.postedBy', select: 'username avatar'},
-                                {path: 'tag', select: 'name color'}
-                            ])
+        async author => 
+            Photo.find({author})
+            .populate([
+                'comments',
+                {path: 'author', select: 'username avatar'},
+                {path: 'comments.postedBy', select: 'username avatar'},
+                {path: 'tag', select: 'name color'}
+            ])
     )));
 
     return res.render('user/timeline', {

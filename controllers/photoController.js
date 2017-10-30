@@ -5,30 +5,22 @@ const Tag = require('../models/Tag');
 const index = async (req, res) => {
     const photos = await Photo.find({
         description: {
-            $in: [new RegExp(
-                req.query.search,
-                'i'
-            )]
+            $in: [new RegExp(req.query.search, 'i')]
         }
-    })
-    .populate([
-        'author',
-        {path: 'tag', select: 'name color'}
-    ]);
+    }).populate(['author', { path: 'tag', select: 'name color' }]);
 
     return res.render('photo/index', {
         title: 'All users',
         photos,
         url: '?'
     });
-}
+};
 
 const create = async (req, res) => {
     req.body.description = req.sanitize(req.body.description);
-    if(req.body.tagName)
-        req.body.tagName = req.sanitize(req.body.tagName);
+    if (req.body.tagName) req.body.tagName = req.sanitize(req.body.tagName);
 
-    const {tag, description, url} = req.body;
+    const { tag, description, url } = req.body;
 
     const user = await User.findOne({
         username: {
@@ -37,14 +29,14 @@ const create = async (req, res) => {
     });
 
     let tagInstance;
-    if(tag === 'new-tag') {
+    if (tag === 'new-tag') {
         const existingTag = await Tag.findOne({
             name: {
                 $in: [req.body.tagName]
             }
         });
 
-        if(existingTag) {
+        if (existingTag) {
             req.flash('error', 'This tag already exists');
             return res.redirect('back');
         }
@@ -78,7 +70,7 @@ const create = async (req, res) => {
 
     req.flash('success', 'Succesfully uploaded photo!');
     return res.redirect(`/photos/${photo.uuid}`);
-}
+};
 
 const showCreate = async (req, res) => {
     const tags = await Tag.find({});
@@ -86,25 +78,23 @@ const showCreate = async (req, res) => {
     return res.render('photo/create', {
         tags,
         tagColors: Tag.getPossibleColors(),
-        title: 'New photo'  
-    })
-}
+        title: 'New photo'
+    });
+};
 
 const show = async (req, res) => {
-    const photo = await 
-        Photo.findOne({
-            uuid: {
-                $in: [req.params.uuid]
-            }
-        })
-        .populate([
-            'comments',
-            {path: 'author', select: 'username'},
-            {path: 'comments.postedBy', select: 'username avatar'},
-            {path: 'tag', select: 'name color'}
-        ]);
+    const photo = await Photo.findOne({
+        uuid: {
+            $in: [req.params.uuid]
+        }
+    }).populate([
+        'comments',
+        { path: 'author', select: 'username' },
+        { path: 'comments.postedBy', select: 'username avatar' },
+        { path: 'tag', select: 'name color' }
+    ]);
 
-    if(!photo) {
+    if (!photo) {
         req.flash('error', 'No photo found.');
         return res.redirect('/404');
     }
@@ -113,33 +103,35 @@ const show = async (req, res) => {
         title: 'Photo by',
         photo
     });
-}  
+};
 
 const like = async (req, res) => {
-    const photo = await 
-        Photo.findOne({
-            uuid: {
-                $in: [req.params.uuid]
-            }
-        }).populate('author');
-    
-    if(!photo) {
+    const photo = await Photo.findOne({
+        uuid: {
+            $in: [req.params.uuid]
+        }
+    }).populate('author');
+
+    if (!photo) {
         req.flash('error', 'No photo found.');
         return res.redirect('/404');
     }
 
-    if(photo.likes
-        .some(likedBy => String(likedBy._id) === String(req.user._id))) {
+    if (
+        photo.likes.some(
+            likedBy => String(likedBy._id) === String(req.user._id)
+        )
+    ) {
         req.flash('error', 'You have already liked this photo!');
         return res.redirect('back');
     }
 
-    photo.likes.push({likedBy: req.user._id});
+    photo.likes.push({ likedBy: req.user._id });
     await photo.save();
 
     req.flash('success', 'Like!');
     return res.redirect('back');
-}
+};
 
 /**
 *
@@ -148,20 +140,19 @@ const like = async (req, res) => {
 * @returns {}
 */
 const comment = async (req, res) => {
-    if(!req.body.text) {
+    if (!req.body.text) {
         req.flash('error', 'Write something first!');
         return res.redirect('back');
     }
     req.body.text = req.sanitize(req.body.text);
 
-    const photo = await 
-        Photo.findOne({
-            uuid: {
-                $in: [req.params.uuid]
-            }
-        });
+    const photo = await Photo.findOne({
+        uuid: {
+            $in: [req.params.uuid]
+        }
+    });
 
-    if(!photo) {
+    if (!photo) {
         req.flash('error', 'No photo found.');
         return res.redirect('/404');
     }
@@ -174,27 +165,26 @@ const comment = async (req, res) => {
 
     req.flash('success', 'Your comment has been posted!');
     return res.redirect('back');
-}
+};
 
 const destroyComment = async (req, res) => {
-    const photo = await 
-        Photo.findOne({
-            uuid: {
-                $in: [req.params.uuid]
-            }
-        });
-    
-    if(!photo) {
+    const photo = await Photo.findOne({
+        uuid: {
+            $in: [req.params.uuid]
+        }
+    });
+
+    if (!photo) {
         req.flash('error', 'No photo found.');
         return res.redirect('/404');
     }
 
-    photo.comments.pull({_id: req.params.comment_id});
+    photo.comments.pull({ _id: req.params.comment_id });
     await photo.save();
 
     req.flash('success', 'Your comment has been removed!');
     return res.redirect('back');
-}
+};
 
 /**
 *
@@ -203,20 +193,19 @@ const destroyComment = async (req, res) => {
 * @returns {}
 */
 const destroy = async (req, res) => {
-    const photo = await 
-        Photo.findOneAndRemove({
-            uuid: {
-                $in: [req.params.uuid]
-            }
-        }).populate('author');
-    
-    const user = await User.findOne({username: photo.author.username});
-    user.userPhotos.pull({_id: photo._id});
+    const photo = await Photo.findOneAndRemove({
+        uuid: {
+            $in: [req.params.uuid]
+        }
+    }).populate('author');
+
+    const user = await User.findOne({ username: photo.author.username });
+    user.userPhotos.pull({ _id: photo._id });
     await user.save();
 
     req.flash('success', 'Your photo has been removed!');
     return res.redirect('back');
-}
+};
 
 /**
 *
@@ -224,9 +213,7 @@ const destroy = async (req, res) => {
 * @param {Object} res 
 * @returns {}
 */
-const showComments = async (req, res) => {
-
-}
+const showComments = async (req, res) => {};
 
 /**
 *
@@ -235,28 +222,26 @@ const showComments = async (req, res) => {
 * @returns {}
 */
 const showLikes = async (req, res) => {
-    const photo = await 
-        Photo.findOne({
-            uuid: {
-                $in: [req.params.uuid]
-            }
-        })
-        .populate('likes.likedBy');
+    const photo = await Photo.findOne({
+        uuid: {
+            $in: [req.params.uuid]
+        }
+    }).populate('likes.likedBy');
 
-    if(!photo) {
+    if (!photo) {
         req.flash('error', 'No photo found.');
         return res.redirect('/404');
     }
-    
+
     return res.render('photo/likes', {
         title: 'Likes',
         photo
     });
-}
+};
 
 module.exports = {
     index,
-    create, 
+    create,
     show,
     showCreate,
     like,
@@ -265,4 +250,4 @@ module.exports = {
     showComments,
     destroy,
     destroyComment
-}
+};

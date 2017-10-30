@@ -1,9 +1,8 @@
 import '../sass/style.scss';
 
-import {$, $$} from './bling';
+import { $, $$ } from './bling';
 
-
-window.onload = function () {
+window.onload = function() {
     document.body.scrollTop = document.documentElement.scrollTop = 0;
 
     /**
@@ -11,23 +10,25 @@ window.onload = function () {
      * flash message click by ID
      */
     const removeFlashMessage = () => {
-        if($('.flash__wrapper')) {
+        if ($('.flash__wrapper')) {
             const flashRemoves = $$('.flash__remove');
             flashRemoves.forEach(remove => {
-                remove.on('click', (e) => {
+                remove.on('click', e => {
                     const id = e.target.getAttribute('data-flash');
                     $(`.flash__wrapper--${id}`).remove();
                 });
             });
         }
-    }
+    };
     removeFlashMessage();
 
     const appendFirstLetterToAvatarPlaceholder = () => {
         const placeholders = $$('.avatar--placeholder');
-        if(placeholders) {
+        if (placeholders) {
             placeholders.forEach(placeholder => {
-                const firstLetter = placeholder.getAttribute('data-name').charAt(0);
+                const firstLetter = placeholder
+                    .getAttribute('data-name')
+                    .charAt(0);
                 const firstLetterEl = document.createElement('span');
                 firstLetterEl.classList.add('placeholder__letter');
                 firstLetterEl.style.lineHeight = `${placeholder.clientHeight}px`;
@@ -39,16 +40,15 @@ window.onload = function () {
 
     appendFirstLetterToAvatarPlaceholder();
 
-
     const adjustPhotoGridHeight = () => {
         const photos = $$('.photo-grid__photo');
-        if(photos) {
+        if (photos) {
             photos.forEach(photo => {
                 const width = photo.clientWidth;
                 photo.style.height = `${width}px`;
             });
         }
-    }
+    };
 
     adjustPhotoGridHeight();
 
@@ -57,82 +57,85 @@ window.onload = function () {
         const navPanel = $('.navbar-user-panel');
         // console.log(toggle)
         let flag;
-        if(toggle) {
+        if (toggle) {
             toggle.on('click', () => {
                 flag = !flag;
 
-                if(flag) 
-                    navPanel.classList.add('active');
-                else 
-                    navPanel.classList.remove('active');
+                if (flag) navPanel.classList.add('active');
+                else navPanel.classList.remove('active');
             });
         }
-    }
+    };
 
     toggleNavPanel();
 
     const handleTableSearch = () => {
         const search = $('.search-input');
-        
-        if(search) {
+
+        if (search) {
             const submit = $('.search-submit');
 
-            if(window.localStorage && localStorage.getItem('search-input')) {
+            if (window.localStorage && localStorage.getItem('search-input')) {
                 search.value = localStorage.getItem('search-input');
             }
 
-            search.on('keyup', (e) => {
-                if(e.keyCode == 13 || e.key == 'Enter') {
+            search.on('keyup', e => {
+                if (e.keyCode == 13 || e.key == 'Enter') {
                     submit.click();
-                } 
-            })
-            
-            submit.on('click', (e) => {
-                
+                }
+            });
+
+            submit.on('click', e => {
                 const url = search.getAttribute('data-url');
-                $('.search-submit').setAttribute('href', `${url}search=${search.value}`)
-                if(window.localStorage)
+                $('.search-submit').setAttribute(
+                    'href',
+                    `${url}search=${search.value}`
+                );
+                if (window.localStorage)
                     localStorage.setItem('search-input', search.value);
-            })
-        }   
-    }
+            });
+        }
+    };
 
     handleTableSearch();
 
-    
     const ioCheckboxHandler = () => {
         const checkboxes = $$('.io-checkbox');
 
-        if(checkboxes) {
+        if (checkboxes) {
             checkboxes.forEach(checkbox => {
                 checkbox.on('change', () => {
                     checkbox.value = +checkbox.checked;
-                })
+                });
             });
         }
-    }
+    };
 
     ioCheckboxHandler();
 
+    const handleTag = value => {
+        if (value === 'new-tag') {
+            // $('.tag-select__wrapper').style.display = 'none';
+            $('.tag-color').style.display = 'block';
+            $('.tag-name').style.display = 'block';
+        } else {
+            $('.tag-color').style.display = 'none';
+            $('.tag-name').style.display = 'none';
+        }
+    };
+
     const handleTagForm = () => {
         const tagSelect = $('.tag-select');
-        tagSelect.on('input', (e) => {
-            const val = e.target.value
-            if(val === 'new-tag') {
-                // $('.tag-select__wrapper').style.display = 'none';
-                $('.tag-color').style.display = 'block';
-                $('.tag-name').style.display = 'block';
-            } else {
-                $('.tag-color').style.display = 'none';
-                $('.tag-name').style.display = 'none';
-            }
-            
+        tagSelect.on('input', e => {
+            handleTag(e.target.value);
         });
-    }
-    
+
+        handleTag(tagSelect.value);
+    };
+
     handleTagForm();
 
     window.on('resize', () => {
         adjustPhotoGridHeight();
-    })
-}
+    });
+};

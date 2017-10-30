@@ -13,16 +13,16 @@ block content
                 label(for='description') Description
                 textarea.form-control(form="newPhotoForm" rows="5" name="description") 
             
-            if(tags.length > 0)
-                .form-group.tag-select__wrapper
-                    label(for='tag') Tag 
-                    select.form-control(name='tag').tag-select
-                        option(value=null disabled) Select a tag
+            .form-group.tag-select__wrapper
+                label(for='tag') Tag 
+                select.form-control(name='tag').tag-select
+                    option(value=null disabled) Select a tag
+                    if(tags.length > 0)
                         each tag, index in tags
                             option(
                                 value=tag.name 
                             )!=`${tag.name}`
-                        option(value='new-tag') Create a new tag
+                    option(value='new-tag') Create a new tag
 
             .form-group.tag-name
                 label(for='tag-name') Tag name
